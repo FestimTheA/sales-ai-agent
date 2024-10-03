@@ -38,8 +38,8 @@ export type MemberInfo = {
 
 export type Users = {
   id: number;
-  workerID: number;
-  externalWorkerID: string;
+  // workerID: number;
+  // externalWorkerID: string;
   memberInfo: MemberInfo;
   country: {
     name: string;
@@ -54,8 +54,8 @@ export type Users = {
 };
 
 export type ColumnsKey =
-  | "workerID"
-  | "externalWorkerID"
+  // | "workerID"
+  // | "externalWorkerID"
   | "memberInfo"
   | "country"
   | "role"
@@ -67,8 +67,8 @@ export type ColumnsKey =
   | "actions";
 
 export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
-  "workerID",
-  "externalWorkerID",
+  // "workerID",
+  // "externalWorkerID",
   "memberInfo",
   "country",
   "role",
@@ -81,8 +81,8 @@ export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
 ];
 
 export const columns = [
-  {name: "Worker ID", uid: "workerID"},
-  {name: "External Worker ID", uid: "externalWorkerID"},
+  // {name: "Worker ID", uid: "workerID"},
+  // {name: "External Worker ID", uid: "externalWorkerID"},
   {name: "Member", uid: "memberInfo", sortDirection: "ascending"},
   {name: "Country", uid: "country"},
   {name: "Role", uid: "role"},
@@ -408,8 +408,8 @@ const generateMockUserData = (count: number): Users[] => {
 
     const user: Users = {
       id: i,
-      workerID: Math.floor(Math.random() * 1000),
-      externalWorkerID: `EXT-${Math.floor(Math.random() * 1000)}`,
+      // workerID: Math.floor(Math.random() * 1000),
+      // externalWorkerID: `EXT-${Math.floor(Math.random() * 1000)}`,
       memberInfo: {
         avatar: `https://i.pravatar.cc/150?img=${i}`,
         email: `${selectedName.toLowerCase().replace(/\s+/g, ".")}@example.com`,
