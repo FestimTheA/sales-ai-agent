@@ -430,10 +430,10 @@ export default function DocsPage() {
 
                       <RadioGroup label="Status" value={statusFilter} onValueChange={setStatusFilter}>
                         <Radio value="all">All</Radio>
-                        <Radio value="active">Active</Radio>
+                        <Radio value="outreached">Outreached</Radio>
                         <Radio value="inactive">Inactive</Radio>
-                        <Radio value="paused">Paused</Radio>
-                        <Radio value="vacation">Vacation</Radio>
+                        <Radio value="failed">Failed</Radio>
+                        <Radio value="waiting">Waiting</Radio>
                       </RadioGroup>
 
                       {/* Commented out 'Start Date' filter */}
@@ -540,10 +540,10 @@ export default function DocsPage() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Selected Actions">
-                  <DropdownItem key="send-email">Send email</DropdownItem>
-                  <DropdownItem key="pay-invoices">Pay invoices</DropdownItem>
+                  <DropdownItem key="delete-lead">Delete</DropdownItem>
+                  {/* <DropdownItem key="pay-invoices">Pay invoices</DropdownItem>
                   <DropdownItem key="bulk-edit">Bulk edit</DropdownItem>
-                  <DropdownItem key="end-contract">End contract</DropdownItem>
+                  <DropdownItem key="end-contract">End contract</DropdownItem> */}
                 </DropdownMenu>
               </Dropdown>
             )}
