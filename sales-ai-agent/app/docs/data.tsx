@@ -54,6 +54,7 @@ export type Users = {
   Company: string;
   LinkedIn: string;
   BANTTotalScore: string;
+  CampaignName: string;
   // workerType: "Contractor" | "Employee";
   status: StatusOptions;
   // startDate: Date;
@@ -70,7 +71,10 @@ export type ColumnsKey =
   | "JobPosition"
   | "Company"
   | "LinkedIn"
-  | "BANTTotalScore"    
+  | "BANTTotalScore" 
+  | "CampaignName" 
+  
+     
   // | "workerType"
   | "status"
   // | "startDate"
@@ -88,6 +92,7 @@ export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
   "Company", 
   "LinkedIn",
   "BANTTotalScore",
+  "CampaignName",
   // "workerType",
   "status",
   // "startDate",
@@ -106,6 +111,7 @@ export const columns = [
   {name: "Company", uid: "Company"},
   {name: "LinkedIn", uid: "LinkedIn"},
   {name: "BANT Total Score", uid: "BANTTotalScore"},
+  {name: "Campaign Name", uid: "CampaignName"},
   // {name: "Worker Type", uid: "workerType"},
   {name: "Status", uid: "status", info: "The user's current status"},
   // {name: "Start Date", uid: "startDate", info: "The date the user started"},
@@ -233,6 +239,11 @@ const BANTTotalScore = [
   "15",
   "10",
   "5",
+];
+
+const CampaignName = [
+  "Campaign 1",
+  "Campaign 2",
 ];
 
 // const countries = [
@@ -455,6 +466,7 @@ const generateMockUserData = (count: number): Users[] => {
     const selectedRole4 = Company[Math.floor(Math.random() * Company.length)];
     const selectedRole5 = LinkedIn[Math.floor(Math.random() * LinkedIn.length)];
     const selectedRole6 = BANTTotalScore[Math.floor(Math.random() * BANTTotalScore.length)];
+    const selectedRole7 = CampaignName[Math.floor(Math.random() * CampaignName.length)];
     // const selectedCountry = countries[Math.floor(Math.random() * countries.length)];
 
     const user: Users = {
@@ -473,6 +485,7 @@ const generateMockUserData = (count: number): Users[] => {
       Company: selectedRole4,
       LinkedIn: selectedRole5,
       BANTTotalScore: selectedRole6,
+      CampaignName: selectedRole7,
       // workerType: Math.random() > 0.5 ? "Contractor" : "Employee",
       status:
         Math.random() > 0.5

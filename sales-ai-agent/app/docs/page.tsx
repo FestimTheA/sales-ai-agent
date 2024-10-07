@@ -36,7 +36,7 @@ import {cn} from "@nextui-org/react";
 
 // Commented CopyText as it was reliable on hidden columns
 // import {CopyText} from "./copy-text";
-import {EyeFilledIcon} from "./eye";
+// import {EyeFilledIcon} from "./eye";
 import {EditLinearIcon} from "./edit";
 import {DeleteFilledIcon} from "./delete";
 // Commented out sorting icons imports
@@ -303,6 +303,12 @@ export default function DocsPage() {
               {cellValue}
             </div>
           );
+          case "CampaignName":
+            return (
+              <div className="text-nowrap text-small capitalize text-default-foreground">
+                {cellValue}
+              </div>
+            );
         // Commented out 'workerType' case
         // case "workerType":
         //   return <div className="text-default-foreground">{cellValue}</div>;
@@ -311,12 +317,12 @@ export default function DocsPage() {
         case "actions":
           return (
             <div className="flex items-center justify-end gap-2">
-              <EyeFilledIcon
+              {/* <EyeFilledIcon
                 {...getEyesProps()}
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
-              />
+              /> */}
               <EditLinearIcon
                 {...getEditProps()}
                 className="cursor-pointer text-default-400"
