@@ -9,20 +9,36 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Docs",
+      label: "Outreach",
       href: "/docs",
     },
     {
-      label: "Pricing",
+      label: "Leads",
       href: "/pricing",
     },
     {
-      label: "Blog",
+      label: "Campaigns",
       href: "/blog",
     },
     {
-      label: "About",
+      label: "Users",
+      href: "/users",
+    },
+    {
+      label: "Sidebar",
       href: "/about",
+    },
+    {
+      label: "Create Campaign",
+      href: "/createcampaign",
+    },
+    {
+      label: "Create Account",
+      href: "/createaccount",
+    },
+    {
+      label: "Sign In",
+      href: "/signin",
     },
   ],
   navMenuItems: [
