@@ -1,6 +1,6 @@
 "use client";
 
-import type {Selection, /*, SortDescriptor*/} from "@nextui-org/react";
+import type {Selection, SortDescriptor} from "@nextui-org/react";
 import type {ColumnsKey, StatusOptions, Users} from "./data";
 import type {Key} from "@react-types/shared";
 
@@ -34,139 +34,121 @@ import React, {useMemo, useRef, useCallback, useState} from "react";
 import {Icon} from "@iconify/react";
 import {cn} from "@nextui-org/react";
 
-// Commented CopyText as it was reliable on hidden columns
-// import {CopyText} from "./copy-text";
+import {CopyText} from "./copy-text";
 import {EyeFilledIcon} from "./eye";
-// import {EditLinearIcon} from "./edit";
-// import {DeleteFilledIcon} from "./delete";
-// Commented out sorting icons imports
-// import {ArrowDownIcon} from "./arrow-down";
-// import {ArrowUpIcon} from "./arrow-up";
+import {EditLinearIcon} from "./edit";
+import {DeleteFilledIcon} from "./delete";
+import {ArrowDownIcon} from "./arrow-down";
+import {ArrowUpIcon} from "./arrow-up";
 
 import {useMemoizedCallback} from "./use-memoized-callback";
 
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
 import {Status} from "./Status";
 
-export default function BlogPage() {
+export default function DocsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [rowsPerPage] = useState(10);
-    
     const [page, setPage] = useState(1);
-// Commented out sortDescriptor state variable
-    // const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    //   column: "FirstName",
-    //   direction: "ascending",
-    // });
-
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+      column: "memberInfo",
+      direction: "ascending",
+    });
   
-    // Commented out unused filters
-    // const [workerTypeFilter, setWorkerTypeFilter] = React.useState("all");
+    const [workerTypeFilter, setWorkerTypeFilter] = React.useState("all");
     const [statusFilter, setStatusFilter] = React.useState("all");
-    // const [startDateFilter, setStartDateFilter] = React.useState("all");
-
+    const [startDateFilter, setStartDateFilter] = React.useState("all");
+  
     const headerColumns = useMemo(() => {
       if (visibleColumns === "all") return columns;
-
-      // Commented out sorting logic
-      // return columns
-      //   .map((item) => {
-      //     if (item.uid === sortDescriptor.column) {
-      //       return {
-      //         ...item,
-      //         sortDirection: sortDescriptor.direction,
-      //       };
-      //     }
-
-      //     return item;
-      //   })
-      //   .filter((column) => Array.from(visibleColumns).includes(column.uid));
-
-      return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-    }, [visibleColumns, /* sortDescriptor */]);
-
+  
+      return columns
+        .map((item) => {
+          if (item.uid === sortDescriptor.column) {
+            return {
+              ...item,
+              sortDirection: sortDescriptor.direction,
+            };
+          }
+  
+          return item;
+        })
+        .filter((column) => Array.from(visibleColumns).includes(column.uid));
+    }, [visibleColumns, sortDescriptor]);
+  
     const itemFilter = useCallback(
       (col: Users) => {
-        // Commented out unused filters
-        // let allWorkerType = workerTypeFilter === "all";
+        let allWorkerType = workerTypeFilter === "all";
         let allStatus = statusFilter === "all";
-        // let allStartDate = startDateFilter === "all";
-
+        let allStartDate = startDateFilter === "all";
+  
         return (
-          // (allWorkerType || workerTypeFilter === col.workerType.toLowerCase()) &&
-          (allStatus || statusFilter === col.status.toLowerCase())
-          // &&
-          // (allStartDate ||
-          //   new Date(
-          //     new Date().getTime() -
-          //       +(startDateFilter.match(/(\d+)(?=Days)/)?.[0] ?? 0) * 24 * 60 * 60 * 1000,
-          //   ) <= new Date(col.startDate))
+          (allWorkerType || workerTypeFilter === col.workerType.toLowerCase()) &&
+          (allStatus || statusFilter === col.status.toLowerCase()) &&
+          (allStartDate ||
+            new Date(
+              new Date().getTime() -
+                +(startDateFilter.match(/(\d+)(?=Days)/)?.[0] ?? 0) * 24 * 60 * 60 * 1000,
+            ) <= new Date(col.startDate))
         );
       },
-      [statusFilter, /* startDateFilter, workerTypeFilter */],
+      [startDateFilter, statusFilter, workerTypeFilter],
     );
-
+  
     const filteredItems = useMemo(() => {
       let filteredUsers = [...users];
-
+  
       if (filterValue) {
         filteredUsers = filteredUsers.filter((user) =>
-          // Updated to search by 'FirstName' instead of 'memberInfo'
-          user.FirstName.toLowerCase().includes(filterValue.toLowerCase()),
+          user.memberInfo.name.toLowerCase().includes(filterValue.toLowerCase()),
         );
       }
-
+  
       filteredUsers = filteredUsers.filter(itemFilter);
-
+  
       return filteredUsers;
     }, [filterValue, itemFilter]);
-
+  
     const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1;
-
+  
     const items = useMemo(() => {
       const start = (page - 1) * rowsPerPage;
       const end = start + rowsPerPage;
-
+  
       return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
-
-    
-    // Commented out sorting logic
-    // const sortedItems = useMemo(() => {
-    //   return [...items].sort((a: Users, b: Users) => {
-    //     const col = sortDescriptor.column as keyof Users;
-
-    //     let first = a[col];
-    //     let second = b[col];
-
-    //     // Commented out special handling for 'memberInfo' and 'country'
-    //     // if (col === "memberInfo" || col === "country") {
-    //     //   first = a[col].name;
-    //     //   second = b[col].name;
-    //     // } else if (sortDescriptor.column === "externalWorkerID") {
-    //     //   first = +a.externalWorkerID.split("EXT-")[1];
-    //     //   second = +b.externalWorkerID.split("EXT-")[1];
-    //     // }
-
-    //     const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-    //     return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    //   });
-    // }, [sortDescriptor, items]);
-    
-    // Use items directly without sorting
-    const sortedItems = items;
-
+  
+    const sortedItems = useMemo(() => {
+      return [...items].sort((a: Users, b: Users) => {
+        const col = sortDescriptor.column as keyof Users;
+  
+        let first = a[col];
+        let second = b[col];
+  
+        if (col === "memberInfo" || col === "country") {
+          first = a[col].name;
+          second = b[col].name;
+        // } else if (sortDescriptor.column === "externalWorkerID") {
+        //   first = +a.externalWorkerID.split("EXT-")[1];
+        //   second = +b.externalWorkerID.split("EXT-")[1];
+        }
+  
+        const cmp = first < second ? -1 : first > second ? 1 : 0;
+  
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      });
+    }, [sortDescriptor, items]);
+  
     const filterSelectedKeys = useMemo(() => {
       if (selectedKeys === "all") return selectedKeys;
       let resultKeys = new Set<Key>();
-
+  
       if (filterValue) {
         filteredItems.forEach((item) => {
           const stringId = String(item.id);
-
+  
           if ((selectedKeys as Set<string>).has(stringId)) {
             resultKeys.add(stringId);
           }
@@ -174,150 +156,132 @@ export default function BlogPage() {
       } else {
         resultKeys = selectedKeys;
       }
-
+  
       return resultKeys;
     }, [selectedKeys, filteredItems, filterValue]);
-
+  
     const eyesRef = useRef<HTMLButtonElement | null>(null);
-    // const editRef = useRef<HTMLButtonElement | null>(null);
-    // const deleteRef = useRef<HTMLButtonElement | null>(null);
+    const editRef = useRef<HTMLButtonElement | null>(null);
+    const deleteRef = useRef<HTMLButtonElement | null>(null);
     const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
-    // const {getButtonProps: getEditProps} = useButton({ref: editRef});
-    // const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
-    // Commented out getMemberInfoProps and handleMemberClick
-    // const getMemberInfoProps = useMemoizedCallback(() => ({
-    //   onClick: handleMemberClick,
-    // }));
-
+    const {getButtonProps: getEditProps} = useButton({ref: editRef});
+    const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
+    const getMemberInfoProps = useMemoizedCallback(() => ({
+      onClick: handleMemberClick,
+    }));
+  
     const renderCell = useMemoizedCallback((user: Users, columnKey: React.Key) => {
       const userKey = columnKey as ColumnsKey;
-
+  
       const cellValue = user[userKey as unknown as keyof Users] as string;
-
+  
       switch (userKey) {
         // case "workerID":
-        // case "externalWorkerID":
+        // // case "externalWorkerID":
         //   return <CopyText>{cellValue}</CopyText>;
-        // Commented out 'memberInfo' case
-        // case "memberInfo":
-        //   return (
-        //     <User
-        //       avatarProps={{radius: "lg", src: user[userKey].avatar}}
-        //       classNames={{
-        //         name: "text-default-foreground",
-        //         description: "text-default-500",
-        //       }}
-        //       description={user[userKey].email}
-        //       name={user[userKey].name}
-        //     >
-        //       {user[userKey].email}
-        //     </User>
-        //   );
-        // Commented out 'startDate' case
-        // case "startDate":
-        //   return (
-        //     <div className="flex items-center gap-1">
-        //       <Icon
-        //         className="h-[16px] w-[16px] text-default-300"
-        //         icon="solar:calendar-minimalistic-linear"
-        //       />
-        //       <p className="text-nowrap text-small capitalize text-default-foreground">
-        //         {new Intl.DateTimeFormat("en-US", {
-        //           month: "long",
-        //           day: "numeric",
-        //           year: "numeric",
-        //         }).format(cellValue as unknown as Date)}
-        //       </p>
-        //     </div>
-        //   );
-        // Commented out 'country' case
-        // case "country":
-        //   return (
-        //     <div className="flex items-center gap-2">
-        //       <div className="h-[16px] w-[16px]">{user[userKey].icon}</div>
-        //       <p className="text-nowrap text-small text-default-foreground">{user[userKey].name}</p>
-        //     </div>
-        //   );
-        // Commented out 'teams' case
-        // case "teams":
-        //   return (
-        //     <div className="float-start flex gap-1">
-        //       {user[userKey].map((team, index) => {
-        //         if (index < 3) {
-        //           return (
-        //             <Chip
-        //               key={team}
-        //               className="rounded-xl bg-default-100 px-[6px] capitalize text-default-800"
-        //               size="sm"
-        //               variant="flat"
-        //             >
-        //               {team}
-        //             </Chip>
-        //           );
-        //         }
-        //         if (index < 4) {
-        //           return (
-        //             <Chip key={team} className="text-default-500" size="sm" variant="flat">
-        //               {`+${team.length - 3}`}
-        //             </Chip>
-        //           );
-        //         }
-
-        //         return null;
-        //       })}
-        //     </div>
-        //   );
-        case "Time":
+        case "memberInfo":
+          return (
+            <User
+              avatarProps={{radius: "lg", src: user[userKey].avatar}}
+              classNames={{
+                name: "text-default-foreground",
+                description: "text-default-500",
+              }}
+              description={user[userKey].email}
+              name={user[userKey].name}
+            >
+              {user[userKey].email}
+            </User>
+          );
+        case "startDate":
+          return (
+            <div className="flex items-center gap-1">
+              <Icon
+                className="h-[16px] w-[16px] text-default-300"
+                icon="solar:calendar-minimalistic-linear"
+              />
+              <p className="text-nowrap text-small capitalize text-default-foreground">
+                {new Intl.DateTimeFormat("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                }).format(cellValue as unknown as Date)}
+              </p>
+            </div>
+          );
+        case "country":
+          return (
+            <div className="flex items-center gap-2">
+              <div className="h-[16px] w-[16px]">{user[userKey].icon}</div>
+              <p className="text-nowrap text-small text-default-foreground">{user[userKey].name}</p>
+            </div>
+          );
+        case "teams":
+          return (
+            <div className="float-start flex gap-1">
+              {user[userKey].map((team, index) => {
+                if (index < 3) {
+                  return (
+                    <Chip
+                      key={team}
+                      className="rounded-xl bg-default-100 px-[6px] capitalize text-default-800"
+                      size="sm"
+                      variant="flat"
+                    >
+                      {team}
+                    </Chip>
+                  );
+                }
+                if (index < 4) {
+                  return (
+                    <Chip key={team} className="text-default-500" size="sm" variant="flat">
+                      {`+${team.length - 3}`}
+                    </Chip>
+                  );
+                }
+  
+                return null;
+              })}
+            </div>
+          );
+        case "role":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
           );
-        case "FirstName":
+        case "role2":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
-          );
-        case "LastName":
+          );  
+          case "role3":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
-          );
-        case "JobPosition":
+          );  
+          case "role4":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
-          );
-        case "Company":
+          );  
+          case "role5":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
-          );
-        case "LinkedIn":
+          );  
+          case "role6":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
-          );
-        // case "BANTTotalScore":
-        //   return (
-        //     <div className="text-nowrap text-small capitalize text-default-foreground">
-        //       {cellValue}
-        //     </div>
-        //   );
-          case "CampaignName":
-            return (
-              <div className="text-nowrap text-small capitalize text-default-foreground">
-                {cellValue}
-              </div>
-            );
-        // Commented out 'workerType' case
-        // case "workerType":
-        //   return <div className="text-default-foreground">{cellValue}</div>;
+          );  
+        case "workerType":
+          return <div className="text-default-foreground">{cellValue}</div>;
         case "status":
           return <Status status={cellValue as StatusOptions} />;
         case "actions":
@@ -329,7 +293,7 @@ export default function BlogPage() {
                 height={18}
                 width={18}
               />
-              {/* <EditLinearIcon
+              <EditLinearIcon
                 {...getEditProps()}
                 className="cursor-pointer text-default-400"
                 height={18}
@@ -340,26 +304,26 @@ export default function BlogPage() {
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
-              /> */}
+              />
             </div>
           );
         default:
           return cellValue;
       }
     });
-
+  
     const onNextPage = useMemoizedCallback(() => {
       if (page < pages) {
         setPage(page + 1);
       }
     });
-
+  
     const onPreviousPage = useMemoizedCallback(() => {
       if (page > 1) {
         setPage(page - 1);
       }
     });
-
+  
     const onSearchChange = useMemoizedCallback((value?: string) => {
       if (value) {
         setFilterValue(value);
@@ -368,12 +332,12 @@ export default function BlogPage() {
         setFilterValue("");
       }
     });
-
+  
     const onSelectionChange = useMemoizedCallback((keys: Selection) => {
       if (keys === "all") {
         if (filterValue) {
           const resultKeys = new Set(filteredItems.map((item) => String(item.id)));
-
+  
           setSelectedKeys(resultKeys);
         } else {
           setSelectedKeys(keys);
@@ -382,7 +346,7 @@ export default function BlogPage() {
         setSelectedKeys(new Set());
       } else {
         const resultKeys = new Set<Key>();
-
+  
         keys.forEach((v) => {
           resultKeys.add(v);
         });
@@ -390,7 +354,7 @@ export default function BlogPage() {
           selectedKeys === "all"
             ? new Set(filteredItems.map((item) => String(item.id)))
             : selectedKeys;
-
+  
         selectedValue.forEach((v) => {
           if (items.some((item) => String(item.id) === v)) {
             return;
@@ -400,7 +364,7 @@ export default function BlogPage() {
         setSelectedKeys(new Set(resultKeys));
       }
     });
-
+  
     const topContent = useMemo(() => {
       return (
         <div className="flex items-center gap-4 overflow-auto px-[6px] py-[4px]">
@@ -429,8 +393,7 @@ export default function BlogPage() {
                   </PopoverTrigger>
                   <PopoverContent className="w-80">
                     <div className="flex w-full flex-col gap-6 px-2 py-4">
-                      {/* Commented out 'Worker Type' filter */}
-                      {/* <RadioGroup
+                      <RadioGroup
                         label="Worker Type"
                         value={workerTypeFilter}
                         onValueChange={setWorkerTypeFilter}
@@ -438,20 +401,17 @@ export default function BlogPage() {
                         <Radio value="all">All</Radio>
                         <Radio value="employee">Employee</Radio>
                         <Radio value="contractor">Contractor</Radio>
-                      </RadioGroup> */}
-
+                      </RadioGroup>
+  
                       <RadioGroup label="Status" value={statusFilter} onValueChange={setStatusFilter}>
                         <Radio value="all">All</Radio>
-                        <Radio value="outreached">Outreached</Radio>
-                        <Radio value="responded">Responded</Radio>
-                        <Radio value="accepted">Accepted</Radio>
+                        <Radio value="active">Active</Radio>
                         <Radio value="inactive">Inactive</Radio>
-                        <Radio value="failed">Failed</Radio>
-                        <Radio value="waiting">Waiting</Radio>
+                        <Radio value="paused">Paused</Radio>
+                        <Radio value="vacation">Vacation</Radio>
                       </RadioGroup>
-
-                      {/* Commented out 'Start Date' filter */}
-                      {/* <RadioGroup
+  
+                      <RadioGroup
                         label="Start Date"
                         value={startDateFilter}
                         onValueChange={setStartDateFilter}
@@ -460,13 +420,12 @@ export default function BlogPage() {
                         <Radio value="last7Days">Last 7 days</Radio>
                         <Radio value="last30Days">Last 30 days</Radio>
                         <Radio value="last60Days">Last 60 days</Radio>
-                      </RadioGroup> */}
+                      </RadioGroup>
                     </div>
                   </PopoverContent>
                 </Popover>
               </div>
-              {/* Commented out the Sort button */}
-              {/* <div>
+              <div>
                 <Dropdown>
                   <DropdownTrigger>
                     <Button
@@ -499,7 +458,7 @@ export default function BlogPage() {
                     )}
                   </DropdownMenu>
                 </Dropdown>
-              </div> */}
+              </div>
               <div>
                 <Dropdown closeOnSelect={false}>
                   <DropdownTrigger>
@@ -530,15 +489,15 @@ export default function BlogPage() {
                 </Dropdown>
               </div>
             </div>
-
+  
             <Divider className="h-5" orientation="vertical" />
-
+  
             <div className="whitespace-nowrap text-sm text-default-800">
               {filterSelectedKeys === "all"
                 ? "All items selected"
                 : `${filterSelectedKeys.size} Selected`}
             </div>
-
+  
             {(filterSelectedKeys === "all" || filterSelectedKeys.size > 0) && (
               <Dropdown>
                 <DropdownTrigger>
@@ -554,10 +513,10 @@ export default function BlogPage() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Selected Actions">
-                  <DropdownItem key="delete-lead">Delete</DropdownItem>
-                  {/* <DropdownItem key="pay-invoices">Pay invoices</DropdownItem>
+                  <DropdownItem key="send-email">Send email</DropdownItem>
+                  <DropdownItem key="pay-invoices">Pay invoices</DropdownItem>
                   <DropdownItem key="bulk-edit">Bulk edit</DropdownItem>
-                  <DropdownItem key="end-contract">End contract</DropdownItem> */}
+                  <DropdownItem key="end-contract">End contract</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             )}
@@ -569,31 +528,33 @@ export default function BlogPage() {
       visibleColumns,
       filterSelectedKeys,
       headerColumns,
-      // Commented out sortDescriptor
-      // sortDescriptor,
+      sortDescriptor,
       statusFilter,
-      // Removed dependencies: workerTypeFilter, startDateFilter, setWorkerTypeFilter, setStartDateFilter
+      workerTypeFilter,
+      startDateFilter,
+      setWorkerTypeFilter,
       setStatusFilter,
+      setStartDateFilter,
       onSearchChange,
       setVisibleColumns,
     ]);
-
+  
     const topBar = useMemo(() => {
       return (
         <div className="mb-[18px] flex items-center justify-between">
           <div className="flex w-[226px] items-center gap-2">
-            <h1 className="text-2xl font-[700] leading-[32px]">Outreach</h1>
+            <h1 className="text-2xl font-[700] leading-[32px]">Leads</h1>
             <Chip className="hidden items-center text-default-500 sm:flex" size="sm" variant="flat">
               {users.length}
             </Chip>
           </div>
-          {/* <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
+          <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
             Add Leads
-          </Button> */}
+          </Button>
         </div>
       );
     }, []);
-
+  
     const bottomContent = useMemo(() => {
       return (
         <div className="flex flex-col items-center justify-between gap-2 px-2 py-2 sm:flex-row">
@@ -624,15 +585,14 @@ export default function BlogPage() {
         </div>
       );
     }, [filterSelectedKeys, page, pages, filteredItems.length, onPreviousPage, onNextPage]);
-
-    // Commented out handleMemberClick
-    // const handleMemberClick = useMemoizedCallback(() => {
-    //   setSortDescriptor({
-    //     column: "memberInfo",
-    //     direction: sortDescriptor.direction === "ascending" ? "descending" : "ascending",
-    //   });
-    // });
-
+  
+    const handleMemberClick = useMemoizedCallback(() => {
+      setSortDescriptor({
+        column: "memberInfo",
+        direction: sortDescriptor.direction === "ascending" ? "descending" : "ascending",
+      });
+    });
+  
     return (
       <div className="h-screen w-screen p-6">
         {topBar}
@@ -646,12 +606,11 @@ export default function BlogPage() {
           }}
           selectedKeys={filterSelectedKeys}
           selectionMode="multiple"
-          // Commented out sortDescriptor and onSortChange
-          // sortDescriptor={sortDescriptor}
+          sortDescriptor={sortDescriptor}
           topContent={topContent}
           topContentPlacement="outside"
           onSelectionChange={onSelectionChange}
-          // onSortChange={setSortDescriptor}
+          onSortChange={setSortDescriptor}
         >
           <TableHeader columns={headerColumns}>
             {(column) => (
@@ -662,8 +621,7 @@ export default function BlogPage() {
                   column.uid === "actions" ? "flex items-center justify-end px-[20px]" : "",
                 ])}
               >
-                {/* Commented out special handling for 'memberInfo' header */}
-                {/* {column.uid === "memberInfo" ? (
+                {column.uid === "memberInfo" ? (
                   <div
                     {...getMemberInfoProps()}
                     className="flex w-full cursor-pointer items-center justify-between"
@@ -675,8 +633,7 @@ export default function BlogPage() {
                       <ArrowDownIcon className="text-default-400" />
                     )}
                   </div>
-                ) :  */}
-                {column.info ? (
+                ) : column.info ? (
                   <div className="flex min-w-[108px] items-center justify-between">
                     {column.name}
                     <Tooltip content={column.info}>
