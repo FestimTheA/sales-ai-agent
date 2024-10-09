@@ -1,7 +1,7 @@
 "use client";
 
 import type {Selection, /*, SortDescriptor*/} from "@nextui-org/react";
-import type {ColumnsKey, StatusOptions, Users} from "./data";
+import type {ColumnsKey, /* StatusOptions, */ Users} from "./data";
 import type {Key} from "@react-types/shared";
 
 import {
@@ -36,9 +36,9 @@ import {cn} from "@nextui-org/react";
 
 // Commented CopyText as it was reliable on hidden columns
 // import {CopyText} from "./copy-text";
-import {EyeFilledIcon} from "./eye";
-// import {EditLinearIcon} from "./edit";
-// import {DeleteFilledIcon} from "./delete";
+// import {EyeFilledIcon} from "./eye";
+import {EditLinearIcon} from "./edit";
+import {DeleteFilledIcon} from "./delete";
 // Commented out sorting icons imports
 // import {ArrowDownIcon} from "./arrow-down";
 // import {ArrowUpIcon} from "./arrow-up";
@@ -46,7 +46,7 @@ import {EyeFilledIcon} from "./eye";
 import {useMemoizedCallback} from "./use-memoized-callback";
 
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
-import {Status} from "./Status";
+// import {Status} from "./Status";
 
 export default function BlogPage() {
     const [filterValue, setFilterValue] = useState("");
@@ -96,7 +96,7 @@ export default function BlogPage() {
 
         return (
           // (allWorkerType || workerTypeFilter === col.workerType.toLowerCase()) &&
-          (allStatus || statusFilter === col.status.toLowerCase())
+          (allStatus || statusFilter === col.CampaignName.toLowerCase())
           // &&
           // (allStartDate ||
           //   new Date(
@@ -114,7 +114,7 @@ export default function BlogPage() {
       if (filterValue) {
         filteredUsers = filteredUsers.filter((user) =>
           // Updated to search by 'FirstName' instead of 'memberInfo'
-          user.FirstName.toLowerCase().includes(filterValue.toLowerCase()),
+          user.CampaignName.toLowerCase().includes(filterValue.toLowerCase()),
         );
       }
 
@@ -178,12 +178,12 @@ export default function BlogPage() {
       return resultKeys;
     }, [selectedKeys, filteredItems, filterValue]);
 
-    const eyesRef = useRef<HTMLButtonElement | null>(null);
-    // const editRef = useRef<HTMLButtonElement | null>(null);
-    // const deleteRef = useRef<HTMLButtonElement | null>(null);
-    const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
-    // const {getButtonProps: getEditProps} = useButton({ref: editRef});
-    // const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
+    // const eyesRef = useRef<HTMLButtonElement | null>(null);
+    const editRef = useRef<HTMLButtonElement | null>(null);
+    const deleteRef = useRef<HTMLButtonElement | null>(null);
+    // const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
+    const {getButtonProps: getEditProps} = useButton({ref: editRef});
+    const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
     // Commented out getMemberInfoProps and handleMemberClick
     // const getMemberInfoProps = useMemoizedCallback(() => ({
     //   onClick: handleMemberClick,
@@ -267,42 +267,48 @@ export default function BlogPage() {
         //       })}
         //     </div>
         //   );
-        case "Time":
+        case "TimeCreated":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
           );
-        case "FirstName":
-          return (
-            <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
-            </div>
-          );
-        case "LastName":
-          return (
-            <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
-            </div>
-          );
-        case "JobPosition":
-          return (
-            <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
-            </div>
-          );
-        case "Company":
-          return (
-            <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
-            </div>
-          );
-        case "LinkedIn":
-          return (
-            <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
-            </div>
-          );
+          case "TimeLastUpdated":
+            return (
+              <div className="text-nowrap text-small capitalize text-default-foreground">
+                {cellValue}
+              </div>
+            );
+        // case "FirstName":
+        //   return (
+        //     <div className="text-nowrap text-small capitalize text-default-foreground">
+        //       {cellValue}
+        //     </div>
+        //   );
+        // case "LastName":
+        //   return (
+        //     <div className="text-nowrap text-small capitalize text-default-foreground">
+        //       {cellValue}
+        //     </div>
+        //   );
+        // case "JobPosition":
+        //   return (
+        //     <div className="text-nowrap text-small capitalize text-default-foreground">
+        //       {cellValue}
+        //     </div>
+        //   );
+        // case "Company":
+        //   return (
+        //     <div className="text-nowrap text-small capitalize text-default-foreground">
+        //       {cellValue}
+        //     </div>
+        //   );
+        // case "LinkedIn":
+        //   return (
+        //     <div className="text-nowrap text-small capitalize text-default-foreground">
+        //       {cellValue}
+        //     </div>
+        //   );
         // case "BANTTotalScore":
         //   return (
         //     <div className="text-nowrap text-small capitalize text-default-foreground">
@@ -318,18 +324,18 @@ export default function BlogPage() {
         // Commented out 'workerType' case
         // case "workerType":
         //   return <div className="text-default-foreground">{cellValue}</div>;
-        case "status":
-          return <Status status={cellValue as StatusOptions} />;
+        // case "status":
+        //   return <Status status={cellValue as StatusOptions} />;
         case "actions":
           return (
             <div className="flex items-center justify-end gap-2">
-              <EyeFilledIcon
+              {/* <EyeFilledIcon
                 {...getEyesProps()}
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
-              />
-              {/* <EditLinearIcon
+              /> */}
+              <EditLinearIcon
                 {...getEditProps()}
                 className="cursor-pointer text-default-400"
                 height={18}
@@ -340,7 +346,7 @@ export default function BlogPage() {
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
-              /> */}
+              />
             </div>
           );
         default:
@@ -442,12 +448,12 @@ export default function BlogPage() {
 
                       <RadioGroup label="Status" value={statusFilter} onValueChange={setStatusFilter}>
                         <Radio value="all">All</Radio>
-                        <Radio value="outreached">Outreached</Radio>
-                        <Radio value="responded">Responded</Radio>
-                        <Radio value="accepted">Accepted</Radio>
+                        <Radio value="outreached">Campaign 1</Radio>
+                        <Radio value="responded">Campaign 2</Radio>
+                        {/* <Radio value="accepted">Accepted</Radio>
                         <Radio value="inactive">Inactive</Radio>
                         <Radio value="failed">Failed</Radio>
-                        <Radio value="waiting">Waiting</Radio>
+                        <Radio value="waiting">Waiting</Radio> */}
                       </RadioGroup>
 
                       {/* Commented out 'Start Date' filter */}
@@ -582,14 +588,14 @@ export default function BlogPage() {
       return (
         <div className="mb-[18px] flex items-center justify-between">
           <div className="flex w-[226px] items-center gap-2">
-            <h1 className="text-2xl font-[700] leading-[32px]">Outreach</h1>
+            <h1 className="text-2xl font-[700] leading-[32px]">Campaigns</h1>
             <Chip className="hidden items-center text-default-500 sm:flex" size="sm" variant="flat">
               {users.length}
             </Chip>
           </div>
-          {/* <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
-            Add Leads
-          </Button> */}
+          <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
+            Create Campaign
+          </Button>
         </div>
       );
     }, []);

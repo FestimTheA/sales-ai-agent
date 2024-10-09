@@ -1,27 +1,27 @@
-import {DangerCircleSvg} from "./danger-circle";
-import {DefaultCircleSvg} from "./default-circle";
-import {SuccessCircleSvg} from "./success-circle";
-import {WarningCircleSvg} from "./warning-circle";
+// import {DangerCircleSvg} from "./danger-circle";
+// import {DefaultCircleSvg} from "./default-circle";
+// import {SuccessCircleSvg} from "./success-circle";
+// import {WarningCircleSvg} from "./warning-circle";
 
-export const statusOptions = [
-  {name: "Outreached", uid: "active"},
-  {name: "Responded", uid: "active"},
-  {name: "Accepted", uid: "active"},
-  {name: "Inactive", uid: "inactive"},
-  {name: "Failed", uid: "paused"},
-  {name: "Waiting", uid: "vacation"},
-] as const;
+// export const statusOptions = [
+//   {name: "Outreached", uid: "active"},
+//   {name: "Responded", uid: "active"},
+//   {name: "Accepted", uid: "active"},
+//   {name: "Inactive", uid: "inactive"},
+//   {name: "Failed", uid: "paused"},
+//   {name: "Waiting", uid: "vacation"},
+// ] as const;
 
-export type StatusOptions = (typeof statusOptions)[number]["name"];
+// export type StatusOptions = (typeof statusOptions)[number]["name"];
 
-export const statusColorMap: Record<StatusOptions, JSX.Element> = {
-  Outreached: SuccessCircleSvg,
-  Responded: SuccessCircleSvg,
-  Accepted: SuccessCircleSvg,
-  Inactive: DefaultCircleSvg,
-  Failed: DangerCircleSvg,
-  Waiting: WarningCircleSvg,
-};
+// export const statusColorMap: Record<StatusOptions, JSX.Element> = {
+//   Outreached: SuccessCircleSvg,
+//   Responded: SuccessCircleSvg,
+//   Accepted: SuccessCircleSvg,
+//   Inactive: DefaultCircleSvg,
+//   Failed: DangerCircleSvg,
+//   Waiting: WarningCircleSvg,
+// };
 
 // Commented out ty[e Teams
 // type Teams =
@@ -52,16 +52,17 @@ export type Users = {
   //   name: string;
   //   icon: React.ReactNode;
   // };
-  Time: string;
-  FirstName: string;
-  LastName: string;
-  JobPosition: string;
-  Company: string;
-  LinkedIn: string;
+  TimeCreated : string;
+  TimeLastUpdated: string;
+  // FirstName: string;
+  // LastName: string;
+  // JobPosition: string;
+  // Company: string;
+  // LinkedIn: string;
   // BANTTotalScore: string;
   CampaignName: string;
   // workerType: "Contractor" | "Employee";
-  status: StatusOptions;
+  // status: StatusOptions;
   // startDate: Date;
   // teams: Teams[];
 };
@@ -71,18 +72,19 @@ export type ColumnsKey =
   // | "externalWorkerID"
   // | "memberInfo"
   // | "country"
-  | "Time"
-  | "FirstName"
-  | "LastName"  
-  | "JobPosition"
-  | "Company"
-  | "LinkedIn"
+  | "TimeCreated"
+  | "TimeLastUpdated"  
+  // | "FirstName"
+  // | "LastName"  
+  // | "JobPosition"
+  // | "Company"
+  // | "LinkedIn"
   // | "BANTTotalScore" 
   | "CampaignName" 
   
      
   // | "workerType"
-  | "status"
+  // | "status"
   // | "startDate"
   // | "teams"
   | "actions";
@@ -92,16 +94,17 @@ export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
   // "externalWorkerID",
   // "memberInfo",
   // "country",
-  "Time",
-  "FirstName",
-  "LastName",
-  "JobPosition",
-  "Company", 
-  "LinkedIn",
+  "TimeCreated",
+  "TimeLastUpdated",
+  // "FirstName",
+  // "LastName",
+  // "JobPosition",
+  // "Company", 
+  // "LinkedIn",
   // "BANTTotalScore",
   "CampaignName",
   // "workerType",
-  "status",
+  // "status",
   // "startDate",
   // "teams",
   "actions",
@@ -112,16 +115,17 @@ export const columns = [
   // {name: "External Worker ID", uid: "externalWorkerID"},
   // {name: "Member", uid: "memberInfo", sortDirection: "ascending"},
   // {name: "Country", uid: "country"},
-  {name: "Time", uid: "Time"},
-  {name: "First Name", uid: "FirstName"},
-  {name: "Last Name", uid: "LastName"},
-  {name: "Job Position", uid: "JobPosition"},
-  {name: "Company", uid: "Company"},
-  {name: "LinkedIn", uid: "LinkedIn"},
+  {name: "Time Created", uid: "TimeCreated"},
+  {name: "Time Last Updated", uid: "TimeLastUpdated"},
+  // {name: "First Name", uid: "FirstName"},
+  // {name: "Last Name", uid: "LastName"},
+  // {name: "Job Position", uid: "JobPosition"},
+  // {name: "Company", uid: "Company"},
+  // {name: "LinkedIn", uid: "LinkedIn"},
   // {name: "BANT Total Score", uid: "BANTTotalScore"},
   {name: "Campaign Name", uid: "CampaignName"},
   // {name: "Worker Type", uid: "workerType"},
-  {name: "Status", uid: "status", info: "The user's current status"},
+  // {name: "Status", uid: "status", info: "The user's current status"},
   // {name: "Start Date", uid: "startDate", info: "The date the user started"},
   // {name: "Teams", uid: "teams"},
   {name: "Actions", uid: "actions"},
@@ -180,67 +184,73 @@ export const columns = [
 //   "Yvette Fielding",
 // ];
 
-const Time = [
+const TimeCreated = [
   "October 10, 2024 at 10:00",
   "October 10, 2024 at 10:05",
   "October 10, 2024 at 10:10",
 ];
 
-const FirstName = [
-  "Alice",
-  "Benjamin",
-  "Clara",
-  "Daniel",
-  "Emily",
-  "Frank",
-  "Grace",
-  "Henry",
-  "Isabella",
-  "Jack",
+const TimeLastUpdated = [
+  "October 10, 2024 at 10:00",
+  "October 10, 2024 at 10:05",
+  "October 10, 2024 at 10:10",
 ];
 
-const LastName = [
-  "Smith",
-  "Johnson",
-  "Brown",
-  "Garcia",
-  "Miller",
-  "Davis",
-  "Martinez",
-  "Taylor",
-  "Wilson",
-  "Anderson",
-];
+// const FirstName = [
+//   "Alice",
+//   "Benjamin",
+//   "Clara",
+//   "Daniel",
+//   "Emily",
+//   "Frank",
+//   "Grace",
+//   "Henry",
+//   "Isabella",
+//   "Jack",
+// ];
 
-const JobPosition = [
-  "Software Engineer",
-  "Product Manager",
-  "Data Scientist",
-    "UX Designer",
-  "DevOps Engineer",
-  "Marketing Specialist",
-  "Sales Executive",
-  "Project Coordinator",
-  "System Administrator",
-  "Business Analyst",
-];
+// const LastName = [
+//   "Smith",
+//   "Johnson",
+//   "Brown",
+//   "Garcia",
+//   "Miller",
+//   "Davis",
+//   "Martinez",
+//   "Taylor",
+//   "Wilson",
+//   "Anderson",
+// ];
 
-const Company = [
-  "Google",
-  "Microsoft",
-  "Apple",
-  "Amazon",
-  "Facebook (Meta)",
-  "Tesla",
-  "IBM",
-  "Oracle",
-  "Netflix",
-  "Adobe",
-];
+// const JobPosition = [
+//   "Software Engineer",
+//   "Product Manager",
+//   "Data Scientist",
+//     "UX Designer",
+//   "DevOps Engineer",
+//   "Marketing Specialist",
+//   "Sales Executive",
+//   "Project Coordinator",
+//   "System Administrator",
+//   "Business Analyst",
+// ];
 
-const LinkedIn = [
-"linkedin.com/in/profile",
-];
+// const Company = [
+//   "Google",
+//   "Microsoft",
+//   "Apple",
+//   "Amazon",
+//   "Facebook (Meta)",
+//   "Tesla",
+//   "IBM",
+//   "Oracle",
+//   "Netflix",
+//   "Adobe",
+// ];
+
+// const LinkedIn = [
+// "linkedin.com/in/profile",
+// ];
 
 // const BANTTotalScore = [
 //   "50",
@@ -474,12 +484,13 @@ const generateMockUserData = (count: number): Users[] => {
 
   for (let i = 0; i < count; i++) {
     // const selectedName = names[Math.floor(Math.random() * names.length)];
-    const selectedRole0 = Time[Math.floor(Math.random() * Time.length)];
-    const selectedRole = FirstName[Math.floor(Math.random() * FirstName.length)];
-    const selectedRole2 = LastName[Math.floor(Math.random() * LastName.length)];
-    const selectedRole3 = JobPosition[Math.floor(Math.random() * JobPosition.length)];
-    const selectedRole4 = Company[Math.floor(Math.random() * Company.length)];
-    const selectedRole5 = LinkedIn[Math.floor(Math.random() * LinkedIn.length)];
+    const selectedRole0 = TimeCreated[Math.floor(Math.random() * TimeCreated.length)];
+    const selectedRole1 = TimeLastUpdated[Math.floor(Math.random() * TimeLastUpdated.length)];
+    // const selectedRole = FirstName[Math.floor(Math.random() * FirstName.length)];
+    // const selectedRole2 = LastName[Math.floor(Math.random() * LastName.length)];
+    // const selectedRole3 = JobPosition[Math.floor(Math.random() * JobPosition.length)];
+    // const selectedRole4 = Company[Math.floor(Math.random() * Company.length)];
+    // const selectedRole5 = LinkedIn[Math.floor(Math.random() * LinkedIn.length)];
     // const selectedRole6 = BANTTotalScore[Math.floor(Math.random() * BANTTotalScore.length)];
     const selectedRole7 = CampaignName[Math.floor(Math.random() * CampaignName.length)];
     // const selectedCountry = countries[Math.floor(Math.random() * countries.length)];
@@ -494,27 +505,28 @@ const generateMockUserData = (count: number): Users[] => {
       //   name: selectedName,
       // },
       // country: selectedCountry,
-      Time: selectedRole0,
-      FirstName: selectedRole,
-      LastName: selectedRole2,
-      JobPosition: selectedRole3,
-      Company: selectedRole4,
-      LinkedIn: selectedRole5,
+      TimeCreated: selectedRole0,
+      TimeLastUpdated:selectedRole1,
+      // FirstName: selectedRole,
+      // LastName: selectedRole2,
+      // JobPosition: selectedRole3,
+      // Company: selectedRole4,
+      // LinkedIn: selectedRole5,
       // BANTTotalScore: selectedRole6,
       CampaignName: selectedRole7,
       // workerType: Math.random() > 0.5 ? "Contractor" : "Employee",
-      status:
-        Math.random() > 0.5
-          ? "Outreached"
-          : Math.random() > 0.5
-            ? "Failed"
-             : Math.random() > 0.5
-            ? "Responded"
-             : Math.random() > 0.5
-            ? "Accepted"
-            : Math.random() > 0.5
-              ? "Waiting"
-              : "Inactive"
+      // status:
+      //   Math.random() > 0.5
+      //     ? "Outreached"
+      //     : Math.random() > 0.5
+      //       ? "Failed"
+      //        : Math.random() > 0.5
+      //       ? "Responded"
+      //        : Math.random() > 0.5
+      //       ? "Accepted"
+      //       : Math.random() > 0.5
+      //         ? "Waiting"
+      //         : "Inactive"
               
       
               
