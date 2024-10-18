@@ -22,6 +22,7 @@ const menuItems = [
   "Create Account",
   "Sign In",
   "User Info",
+  "Sales AI Agent",
   "Campaigns",
   "Create Campaign",
   "Leads",
@@ -77,6 +78,11 @@ export const Navbar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
+          <Link className="text-default-500" href="/sales-ai-agent" size="sm">
+            Sales AI Agent
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
           <Link className="text-default-500" href="/campaigns" size="sm">
             Campaigns
           </Link>
@@ -102,7 +108,7 @@ export const Navbar = () => {
         </NavbarItem>
         <NavbarItem className="ml-2 !flex">
           <Button radius="full" variant="flat">
-            Login
+            Sign In
           </Button>
         </NavbarItem>
       </NavbarContent>
