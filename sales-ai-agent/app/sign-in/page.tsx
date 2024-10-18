@@ -15,6 +15,7 @@ export default function Component() {
         <p className="pb-2 text-xl font-medium">Sign In</p>
         <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
           <Input
+            isRequired
             label="Email"
             name="email"
             placeholder="Enter your email"
@@ -37,6 +38,7 @@ export default function Component() {
                 )}
               </button>
             }
+            isRequired
             label="Password"
             name="password"
             placeholder="Enter your password"
