@@ -1,140 +1,137 @@
+"use client";
+
+// Removed this import
+// import type {NavbarProps} from "@nextui-org/react"; 
+
+import React from "react";
 import {
   Navbar as NextUINavbar,
-  NavbarContent,
-  NavbarMenu,
-  NavbarMenuToggle,
   NavbarBrand,
+  NavbarContent,
   NavbarItem,
+  NavbarMenu,
   NavbarMenuItem,
-} from "@nextui-org/navbar";
-import { Button } from "@nextui-org/button";
-import { Kbd } from "@nextui-org/kbd";
-import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
-import { link as linkStyles } from "@nextui-org/theme";
-import NextLink from "next/link";
-import clsx from "clsx";
-
-import { siteConfig } from "@/config/site";
+  NavbarMenuToggle,
+  Link,
+  Button,
+} from "@nextui-org/react";
+import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-  Logo,
-} from "@/components/icons";
 
+const menuItems = [
+  "Create Account",
+  "Sign In",
+  "User Info",
+  "Campaigns",
+  "Create Campaign",
+  "Leads",
+  "Outreach",
+  "Users",
+  "ThemeSwitch" /* Added ThemeSwitch */
+];
+
+// This was the original code but it didn't work
+// export default function Component(props: NavbarProps) {
+//   return (
+//     <Navbar
+//       {...props}
 export const Navbar = () => {
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
-
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand as="li" className="gap-3 max-w-fit">
-          <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Logo />
-            <p className="font-bold text-inherit">ACME</p>
-          </NextLink>
-        </NavbarBrand>
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </ul>
-      </NavbarContent>
-
+    <NextUINavbar
+      classNames={{
+        base: "py-4 backdrop-filter-none bg-transparent",
+        wrapper: "px-0 w-full justify-center bg-transparent",
+        item: "hidden md:flex",
+      }}
+      height="54px"
+    >
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
+        className="gap-4 rounded-full border-small border-default-200/20 bg-background/60 px-2 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
+        justify="center"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
-            <TwitterIcon className="text-default-500" />
+        {/* Toggle */}
+        <NavbarMenuToggle className="ml-2 text-default-400 md:hidden" />
+
+        {/* Logo */}
+        <NavbarBrand className="mr-2 w-[40vw] md:w-auto md:max-w-fit">
+          <div className="rounded-full bg-foreground text-background">
+            <Logo />
+          </div>
+          <span className="ml-2 font-medium md:hidden">ACME</span>
+        </NavbarBrand>
+        
+       {/* Items */}
+       <NavbarItem className="hidden md:flex">
+          <Link className="text-default-500" href="/create-account" size="sm">
+            Create Account
           </Link>
-          <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
-            <DiscordIcon className="text-default-500" />
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/sign-in" size="sm">
+            Sign In
           </Link>
-          <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-            <GithubIcon className="text-default-500" />
+        </NavbarItem>
+        <NavbarItem isActive>
+          <Link aria-current="page" color="foreground" href="/user-info" size="sm">
+            User Info
           </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/campaigns" size="sm">
+            Campaigns
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/leads" size="sm">
+            Leads
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/outreach" size="sm">
+            Outreach
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/users" size="sm">
+            Users
+          </Link>
+        </NavbarItem>
+        {/* Added ThemeSwitch */}
+        <NavbarItem>
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sponsors
+        <NavbarItem className="ml-2 !flex">
+          <Button radius="full" variant="flat">
+            Login
           </Button>
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link>
-        <ThemeSwitch />
-        <NavbarMenuToggle />
-      </NavbarContent>
-
-      <NavbarMenu>
-        {searchInput}
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
-                }
-                href="#"
-                size="lg"
-              >
-                {item.label}
+      {/* Menu */}
+      <NavbarMenu
+        className="top-[calc(var(--navbar-height)/2)] mx-auto mt-16 max-h-[40vh] max-w-[80vw] rounded-large border-small border-default-200/20 bg-background/60 py-6 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
+        motionProps={{
+          initial: {opacity: 0, y: -20},
+          animate: {opacity: 1, y: 0},
+          exit: {opacity: 0, y: -20},
+          transition: {
+            ease: "easeInOut",
+            duration: 0.2,
+          },
+        }}
+      >
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            {/* Added ThemeSwitch */}
+            {item === "ThemeSwitch" ? (
+              <ThemeSwitch />
+            ) : (
+              <Link className="w-full text-default-500" href="#" size="md">
+                {item}
               </Link>
-            </NavbarMenuItem>
-          ))}
-        </div>
+            )}
+          </NavbarMenuItem>
+        ))}
       </NavbarMenu>
     </NextUINavbar>
   );
