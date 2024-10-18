@@ -30,15 +30,19 @@ export const siteConfig = {
     },
     {
       label: "Create Campaign",
-      href: "/createcampaign",
+      href: "/create-campaign",
     },
     {
       label: "Create Account",
-      href: "/createaccount",
+      href: "/create-account",
     },
     {
       label: "Sign In",
-      href: "/signin",
+      href: "/sign-in",
+    },
+    {
+      label: "User Info",
+      href: "/user-info",
     },
   ],
   navMenuItems: [
