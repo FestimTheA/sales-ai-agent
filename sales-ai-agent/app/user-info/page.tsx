@@ -13,17 +13,17 @@ export default function Component() {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex w-full max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
+      <div className="flex w-full max-w-lg flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
         <p className="pb-2 text-xl font-medium">Just One More Thing</p>
         <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-          {/* <Input
+          <Input
             isRequired
-            label="Job Position"
-            name="job-position"
-            placeholder="Enter your job position"
+            label="Company Name"
+            name="company-name"
+            placeholder="Enter your company name"
             type="text"
             variant="bordered"
-          /> */}
+          />
           <Input
             isRequired
             label="Company Website"

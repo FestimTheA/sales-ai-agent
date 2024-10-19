@@ -47,7 +47,7 @@ export const Navbar = () => {
       height="54px"
     >
       <NavbarContent
-        className="gap-4 rounded-full border-small border-default-200/20 bg-background/60 px-2 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
+        className="gap-4 rounded-2xl border-small border-default-200/20 bg-background/60 px-2 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
         justify="center"
       >
         {/* Toggle */}
@@ -88,6 +88,11 @@ export const Navbar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
+          <Link className="text-default-500" href="/create-campaign" size="sm">
+            Create Campaign
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
           <Link className="text-default-500" href="/leads" size="sm">
             Leads
           </Link>
@@ -107,7 +112,7 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="ml-2 !flex">
-          <Button radius="full" variant="flat">
+          <Button radius="lg" variant="flat">
             Sign In
           </Button>
         </NavbarItem>
@@ -132,7 +137,7 @@ export const Navbar = () => {
             {item === "ThemeSwitch" ? (
               <ThemeSwitch />
             ) : (
-              <Link className="w-full text-default-500" href="#" size="md">
+              <Link className="w-full text-default-500" href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} size="md">
                 {item}
               </Link>
             )}
