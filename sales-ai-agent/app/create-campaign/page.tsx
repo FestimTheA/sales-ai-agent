@@ -153,6 +153,11 @@ export default function Page() {
           </div>
         )}
 
+        {/* Available Leads Info */}
+        <p className="text-small text-default-500 mt-4">
+          Based on these filters, there are 10,000 available leads.
+        </p>
+
         {/* Number of Leads Input */}
         <Input
           type="number"

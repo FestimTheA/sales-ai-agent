@@ -26,6 +26,7 @@ const menuItems = [
   "Campaigns",
   "Create Campaign",
   "Leads",
+  "Add Leads",
   "Outreach",
   "Users",
   "ThemeSwitch" /* Added ThemeSwitch */
@@ -95,6 +96,11 @@ export const Navbar = () => {
         <NavbarItem>
           <Link className="text-default-500" href="/leads" size="sm">
             Leads
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/add-leads" size="sm">
+            Add Leads
           </Link>
         </NavbarItem>
         <NavbarItem>
