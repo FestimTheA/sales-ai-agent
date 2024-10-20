@@ -5,12 +5,27 @@ import {Autocomplete, AutocompleteItem, Chip} from "@nextui-org/react";
 import {JobPositions} from "./data";
 
 export default function App() {
-  const [value, setValue] = React.useState<string | number | null>("");
+  // Function to handle an array of selected values
+  const [values, setValues] = React.useState<(string | number | null )[]>([]);
 
-  // Function to handle closing the chip, which clears the selection
-  const handleClose = () => {
-    setValue(null);
+  // Function to handle closing a chip, which removes the selected value
+  const handleClose = (valueToRemove: string | number | null) => {
+    setValues((prevValues) => prevValues.filter(value => value !== valueToRemove));
   };
+
+  // Function to handle selection change
+  const handleSelectionChange = (selectedValue: string | number | null) => {
+    if (selectedValue) { // Check if the selected value is not empty
+      setValues((prevValues) => {
+        // Add the selected value if it's not already in the array
+        if (!prevValues.includes(selectedValue)) {
+          return [...prevValues, selectedValue];
+        }
+        return prevValues;
+      });
+    }
+  };
+
   return (
     <div className="flex w-full max-w-xl flex-col gap-2">
       <Autocomplete
@@ -18,20 +33,19 @@ export default function App() {
         variant="bordered"
         defaultItems={JobPositions}
         placeholder="Search for a job position"
-        selectedKey={value}
-        onSelectionChange={setValue}
+        onSelectionChange={handleSelectionChange}
       >
       {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
       </Autocomplete>
      
-      {/* Return the selected value as a Chip with top padding */}
-      {value && (
-        <div className="pt-1">
-          <Chip onClose={handleClose} variant="flat">
+      {/* Return the selected values as Chips with top padding. Use a flex container to display chips next to each other */}
+      <div className="flex flex-wrap gap-2 pt-1">
+        {values.map((value) => (
+          <Chip key={value} onClose={() => handleClose(value)} variant="flat">
             {value}
           </Chip>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
