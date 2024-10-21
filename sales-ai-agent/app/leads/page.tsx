@@ -35,15 +35,15 @@ import {Icon} from "@iconify/react";
 import {cn} from "@nextui-org/react";
 
 // Commented CopyText as it was reliable on hidden columns
-// import {CopyText} from "./copy-text";
-// import {EyeFilledIcon} from "./eye";
-import {EditLinearIcon} from "./edit";
-import {DeleteFilledIcon} from "./delete";
+// import {CopyText} from "@/utils/copy-text";
+// import {EyeFilledIcon} from "@/components/icons";
+import {EditLinearIcon} from "@/components/icons";
+import {DeleteFilledIcon} from "@/components/icons";
 // Commented out sorting icons imports
-// import {ArrowDownIcon} from "./arrow-down";
-// import {ArrowUpIcon} from "./arrow-up";
+// import {ArrowDownIcon} from "@/components/icons";
+// import {ArrowUpIcon} from "@/components/icons";
 
-import {useMemoizedCallback} from "./use-memoized-callback";
+import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
 
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
 import {Status} from "./Status";

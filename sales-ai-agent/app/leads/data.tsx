@@ -1,7 +1,7 @@
-import {DangerCircleSvg} from "./danger-circle";
-import {DefaultCircleSvg} from "./default-circle";
-import {SuccessCircleSvg} from "./success-circle";
-import {WarningCircleSvg} from "./warning-circle";
+import {DangerCircleSvg} from "@/components/icons";
+import {DefaultCircleSvg} from "@/components/icons";
+import {SuccessCircleSvg} from "@/components/icons";
+import {WarningCircleSvg} from "@/components/icons";
 
 export const statusOptions = [
   {name: "Outreached", uid: "active"},
