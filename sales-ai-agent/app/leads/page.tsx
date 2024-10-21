@@ -17,17 +17,12 @@ import {
   TableCell,
   Input,
   Button,
-  RadioGroup,
-  Radio,
   Chip,
   User,
   Pagination,
   Divider,
   Tooltip,
   useButton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   DropdownSection,
 } from "@nextui-org/react";
 import {SearchIcon} from "@nextui-org/shared-icons";
@@ -410,9 +405,13 @@ export default function PricingPage() {
                       }
                     >
                       Filter: {" "}
-                      {statusFilter !== "all" ? `Status: ${statusFilter}` : "Status: All"},
-                      {" "}
-                      {campaignFilter !== "all" ? `Campaign: ${campaignFilter}` : "Campaign: All"}
+                      {statusFilter === "all" && campaignFilter === "all" ? "All" : (
+                        <>
+                          {statusFilter !== "all" && `Status: ${statusFilter}`}
+                          {statusFilter !== "all" && campaignFilter !== "all" && ", "}
+                          {campaignFilter !== "all" && `Campaign: ${campaignFilter}`}
+                        </>
+                      )}
                     </Button>
                   </DropdownTrigger>  
                   <DropdownMenu 
