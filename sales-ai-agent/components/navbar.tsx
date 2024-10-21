@@ -21,6 +21,7 @@ import { ThemeSwitch } from "@/components/theme-switch";
 const menuItems = [
   "Create Account",
   "Sign In",
+  "Forgot Password?",
   "User Info",
   "Sales AI Agent",
   "Campaigns",
@@ -71,6 +72,11 @@ export const Navbar = () => {
         <NavbarItem>
           <Link className="text-default-500" href="/sign-in" size="sm">
             Sign In
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/forgot-password" size="sm">
+            Forgot Password?
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
