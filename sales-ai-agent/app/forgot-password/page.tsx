@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import {Button, Input} from "@nextui-org/react";
+import {Button, Input, Link} from "@nextui-org/react";
 
 export default function Component() {
   return (
@@ -22,6 +22,12 @@ export default function Component() {
               Reset Password
             </Button>
           </form>
+          <p className="text-left text-small">
+            Go back to&nbsp;
+            <Link href="sign-in" size="sm">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     </div>

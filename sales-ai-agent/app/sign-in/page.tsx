@@ -71,7 +71,7 @@ export default function Component() {
               Sign In with Google
             </Button>
           </div>
-          <p className="text-center text-small">
+          <p className="text-left text-small">
             You don't have an account?&nbsp;
             <Link href="create-account" size="sm">
               Create Account

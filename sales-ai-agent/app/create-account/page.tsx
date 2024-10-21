@@ -73,7 +73,7 @@ export default function Component() {
               Create Account with Google
             </Button>
           </div>
-          <p className="text-center text-small">
+          <p className="text-left text-small">
             Already have an account?&nbsp;
             <Link href="sign-in" size="sm">
               Sign In
