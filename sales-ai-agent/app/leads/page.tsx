@@ -99,8 +99,9 @@ export default function PricingPage() {
 
       if (filterValue) {
         filteredUsers = filteredUsers.filter((user) =>
-          // Updated to search by 'FirstName' instead of 'memberInfo'
-          user.FirstName.toLowerCase().includes(filterValue.toLowerCase()),
+          Object.values(user).some((value) =>
+            String(value).toLowerCase().includes(filterValue.toLowerCase())
+          )
         );
       }
 
