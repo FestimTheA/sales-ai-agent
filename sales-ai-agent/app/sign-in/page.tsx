@@ -70,16 +70,10 @@ export default function Component() {
             >
               Sign In with Google
             </Button>
-            {/* <Button
-              startContent={<Icon className="text-default-500" icon="fe:github" width={24} />}
-              variant="bordered"
-            >
-              Continue with Github
-            </Button> */}
           </div>
           <p className="text-center text-small">
             You don't have an account?&nbsp;
-            <Link href="#" size="sm">
+            <Link href="create-account" size="sm">
               Create Account
             </Link>
           </p>

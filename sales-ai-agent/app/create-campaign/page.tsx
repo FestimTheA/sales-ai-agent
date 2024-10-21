@@ -10,6 +10,8 @@ export default function Page() {
   const [selectedAnimals3, setSelectedAnimals3] = React.useState<string[]>([]);
   const [numberOfLeads, setNumberOfLeads] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [addingLeads, setAddingLeads] = React.useState(false);
+  const [showLeadsMessage, setShowLeadsMessage] = React.useState(false);
 
   const handleSelectionChange1 = (selectedItems) => {
     setSelectedAnimals1(Array.from(selectedItems));
@@ -36,7 +38,9 @@ export default function Page() {
   };
 
   const handleNumberOfLeadsChange = (event) => {
-    setNumberOfLeads(event.target.value);
+    const value = event.target.value;
+    setNumberOfLeads(value);
+    setShowLeadsMessage(value !== "");
   };
 
   const handleDescriptionChange = (event) => {
@@ -46,13 +50,16 @@ export default function Page() {
     }
   };
 
+  const handleAddLeads = () => {
+    setAddingLeads(true);
+  };
+
   const handleSave = () => {
     // Add your save logic here
     console.log("Saving campaign...");
     console.log("Number of Leads to source:", numberOfLeads);
   };
 
-  
   return (
     <>
       {/* Create Campaign Section */}
@@ -166,7 +173,20 @@ export default function Page() {
           value={numberOfLeads}
           onChange={handleNumberOfLeadsChange}
           variant="bordered"
+          className="w-full"
         />
+
+        {showLeadsMessage && (
+          <p className="text-small text-default-500 mt-2">
+            {numberOfLeads} new leads will be added to this campaign
+          </p>
+        )}
+
+        {addingLeads && (
+          <p className="text-small text-default-500 mt-2">
+            {numberOfLeads} leads are being successfully added in the background. You can now save the campaign while leads are added.
+          </p>
+        )}
 
         {/* Save Button */}
         <Button color="primary" onClick={handleSave} className="mt-4">

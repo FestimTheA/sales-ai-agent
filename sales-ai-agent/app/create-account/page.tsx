@@ -6,10 +6,8 @@ import {Icon} from "@iconify/react";
 
 export default function Component() {
   const [isVisible, setIsVisible] = React.useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = React.useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -17,14 +15,6 @@ export default function Component() {
         <h1 className="text-2xl font-[700] leading-[32px] mb-4">Create Account</h1>
         <div className="flex w-full flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
           <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-            {/* <Input
-              isRequired
-              label="Username"
-              name="username"
-              placeholder="Enter your username"
-              type="text"
-              variant="bordered"
-            /> */}
             <Input
               isRequired
               label="Email"
@@ -56,29 +46,6 @@ export default function Component() {
               type={isVisible ? "text" : "password"}
               variant="bordered"
             />
-            {/* <Input
-              isRequired
-              endContent={
-                <button type="button" onClick={toggleConfirmVisibility}>
-                  {isConfirmVisible ? (
-                    <Icon
-                      className="pointer-events-none text-2xl text-default-400"
-                      icon="solar:eye-closed-linear"
-                    />
-                  ) : (
-                    <Icon
-                      className="pointer-events-none text-2xl text-default-400"
-                      icon="solar:eye-bold"
-                    />
-                  )}
-                </button>
-              }
-              label="Confirm Password"
-              name="confirmPassword"
-              placeholder="Confirm your password"
-              type={isConfirmVisible ? "text" : "password"}
-              variant="bordered"
-            /> */}
             <Checkbox isRequired className="py-4" size="sm">
               I agree with the&nbsp;
               <Link href="#" size="sm">
@@ -105,12 +72,6 @@ export default function Component() {
             >
               Create Account with Google
             </Button>
-            {/* <Button
-              startContent={<Icon className="text-default-500" icon="fe:github" width={24} />}
-              variant="bordered"
-            >
-              Sign Up with Github
-            </Button> */}
           </div>
           <p className="text-center text-small">
             Already have an account?&nbsp;

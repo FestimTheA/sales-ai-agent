@@ -74,8 +74,8 @@ export const Navbar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link aria-current="page" color="foreground" href="/user-info" size="sm">
-            User Info
+          <Link aria-current="page" color="foreground" href="/company-info" size="sm">
+            Company Info
           </Link>
         </NavbarItem>
         <NavbarItem>

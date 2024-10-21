@@ -99,9 +99,9 @@ export default function App() {
 
   // Add this new array for campaign options (you might want to fetch this from an API or database)
   const campaigns = [
-    { value: "campaign1", label: "Summer Sale 2023" },
-    { value: "campaign2", label: "New Product Launch" },
-    { value: "campaign3", label: "Customer Retention Drive" },
+    { value: "campaign1", label: "Pilot" },
+    { value: "campaign2", label: "Campaign 2" },
+    { value: "campaign3", label: "Campaign 3" },
   ];
 
   return (
