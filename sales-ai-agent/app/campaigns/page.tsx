@@ -37,7 +37,7 @@ import {cn} from "@nextui-org/react";
 // Commented CopyText as it was reliable on hidden columns
 // import {CopyText} from "./copy-text";
 // import {EyeFilledIcon} from "./eye";
-import {EditLinearIcon} from "./edit";
+import {EditLinearIcon} from "@/components/icons";
 import {DeleteFilledIcon} from "./delete";
 // Commented out sorting icons imports
 // import {ArrowDownIcon} from "./arrow-down";

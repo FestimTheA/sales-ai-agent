@@ -1,47 +1,3 @@
-// import {DangerCircleSvg} from "./danger-circle";
-// import {DefaultCircleSvg} from "./default-circle";
-// import {SuccessCircleSvg} from "./success-circle";
-// import {WarningCircleSvg} from "./warning-circle";
-
-// export const statusOptions = [
-//   {name: "Outreached", uid: "active"},
-//   {name: "Responded", uid: "active"},
-//   {name: "Accepted", uid: "active"},
-//   {name: "Inactive", uid: "inactive"},
-//   {name: "Failed", uid: "paused"},
-//   {name: "Waiting", uid: "vacation"},
-// ] as const;
-
-// export type StatusOptions = (typeof statusOptions)[number]["name"];
-
-// export const statusColorMap: Record<StatusOptions, JSX.Element> = {
-//   Outreached: SuccessCircleSvg,
-//   Responded: SuccessCircleSvg,
-//   Accepted: SuccessCircleSvg,
-//   Inactive: DefaultCircleSvg,
-//   Failed: DangerCircleSvg,
-//   Waiting: WarningCircleSvg,
-// };
-
-// Commented out ty[e Teams
-// type Teams =
-//   | "Design"
-//   | "Product"
-//   | "Marketing"
-//   | "Management"
-//   | "Engineering"
-//   | "Sales"
-//   | "Support"
-//   | "Other"
-//   | (string & {});
-
-// Commented out type MemberInfo
-// export type MemberInfo = {
-//   avatar: string;
-//   email: string;
-//   name: string;
-// };
-
 export type Users = {
   id: number;
   // Commented out WorkerID, externalWorkerID, MemberInfo, workerType, startDate, teams
@@ -52,7 +8,7 @@ export type Users = {
   //   name: string;
   //   icon: React.ReactNode;
   // };
-  TimeCreated : string;
+  TimeCreated: Date;
   TimeLastUpdated: string;
   // FirstName: string;
   // LastName: string;
@@ -551,3 +507,4 @@ const generateMockUserData = (count: number): Users[] => {
 // "
 
 export const users: Users[] = generateMockUserData(100);
+

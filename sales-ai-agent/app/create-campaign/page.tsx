@@ -10,7 +10,6 @@ export default function Page() {
   const [selectedAnimals3, setSelectedAnimals3] = React.useState<string[]>([]);
   const [numberOfLeads, setNumberOfLeads] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [addingLeads, setAddingLeads] = React.useState(false);
   const [showLeadsMessage, setShowLeadsMessage] = React.useState(false);
 
   const handleSelectionChange1 = (selectedItems) => {
@@ -48,10 +47,6 @@ export default function Page() {
     if (text.length <= 300) {
       setDescription(text);
     }
-  };
-
-  const handleAddLeads = () => {
-    setAddingLeads(true);
   };
 
   const handleSave = () => {
@@ -179,12 +174,6 @@ export default function Page() {
         {showLeadsMessage && (
           <p className="text-small text-default-500 mt-2">
             {numberOfLeads} new leads will be added to this campaign
-          </p>
-        )}
-
-        {addingLeads && (
-          <p className="text-small text-default-500 mt-2">
-            {numberOfLeads} leads are being successfully added in the background. You can now save the campaign while leads are added.
           </p>
         )}
 
