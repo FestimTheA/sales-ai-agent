@@ -28,7 +28,6 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  DropdownSection,
 } from "@nextui-org/react";
 import {SearchIcon} from "@nextui-org/shared-icons";
 import React, {useMemo, useRef, useCallback, useState} from "react";
@@ -62,9 +61,11 @@ export default function PricingPage() {
     //   direction: "ascending",
     // });
 
-
+  
+    // Commented out unused filters
+    // const [workerTypeFilter, setWorkerTypeFilter] = React.useState("all");
     const [statusFilter, setStatusFilter] = React.useState("all");
-    const [campaignFilter, setCampaignFilter] = React.useState("all");
+    // const [startDateFilter, setStartDateFilter] = React.useState("all");
 
     const headerColumns = useMemo(() => {
       if (visibleColumns === "all") return columns;
@@ -88,15 +89,23 @@ export default function PricingPage() {
 
     const itemFilter = useCallback(
       (col: Users) => {
+        // Commented out unused filters
+        // let allWorkerType = workerTypeFilter === "all";
         let allStatus = statusFilter === "all";
-        let allCampaign = campaignFilter === "all";
+        // let allStartDate = startDateFilter === "all";
 
         return (
-          (allStatus || statusFilter === col.status) &&
-          (allCampaign || campaignFilter === col.CampaignName)
+          // (allWorkerType || workerTypeFilter === col.workerType.toLowerCase()) &&
+          (allStatus || statusFilter === col.status.toLowerCase())
+          // &&
+          // (allStartDate ||
+          //   new Date(
+          //     new Date().getTime() -
+          //       +(startDateFilter.match(/(\d+)(?=Days)/)?.[0] ?? 0) * 24 * 60 * 60 * 1000,
+          //   ) <= new Date(col.startDate))
         );
       },
-      [statusFilter, campaignFilter],
+      [statusFilter, /* startDateFilter, workerTypeFilter */],
     );
 
     const filteredItems = useMemo(() => {
@@ -400,8 +409,8 @@ export default function PricingPage() {
                 onValueChange={onSearchChange}
               />
               <div>
-                <Dropdown>
-                  <DropdownTrigger>
+                <Popover placement="bottom">
+                  <PopoverTrigger>
                     <Button
                       className="bg-default-100 text-default-800"
                       size="sm"
@@ -409,33 +418,44 @@ export default function PricingPage() {
                         <Icon className="text-default-400" icon="solar:tuning-2-linear" width={16} />
                       }
                     >
-                      Filter: {" "}
-                      {statusFilter !== "all" ? `Status: ${statusFilter}` : "Status: All"},
-                      {" "}
-                      {campaignFilter !== "all" ? `Campaign: ${campaignFilter}` : "Campaign: All"}
+                      Filter
                     </Button>
-                  </DropdownTrigger>  
-                  <DropdownMenu 
-                    selectedKeys={new Set([
-                      statusFilter !== "all" ? statusFilter : "status-all",
-                      campaignFilter !== "all" ? campaignFilter : "campaign-all"
-                    ])}
-                    selectionMode="single"
-                  >
-                    <DropdownSection title="Status">
-                      <DropdownItem key="status-all" onPress={() => setStatusFilter("all")}>All</DropdownItem>
-                      <DropdownItem key="Outreached" onPress={() => setStatusFilter("Outreached")}>Outreached</DropdownItem>
-                      <DropdownItem key="Inactive" onPress={() => setStatusFilter("Inactive")}>Inactive</DropdownItem>
-                      <DropdownItem key="Failed" onPress={() => setStatusFilter("Failed")}>Failed</DropdownItem>
-                      <DropdownItem key="Waiting" onPress={() => setStatusFilter("Waiting")}>Waiting</DropdownItem>
-                    </DropdownSection> 
-                    <DropdownSection title="Campaign">
-                      <DropdownItem key="campaign-all" onPress={() => setCampaignFilter("all")}>All</DropdownItem>
-                      <DropdownItem key="Campaign 1" onPress={() => setCampaignFilter("Campaign 1")}>Campaign 1</DropdownItem>
-                      <DropdownItem key="Campaign 2" onPress={() => setCampaignFilter("Campaign 2")}>Campaign 2</DropdownItem>
-                    </DropdownSection>
-                  </DropdownMenu>
-                </Dropdown>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80">
+                    <div className="flex w-full flex-col gap-6 px-2 py-4">
+                      {/* Commented out 'Worker Type' filter */}
+                      {/* <RadioGroup
+                        label="Worker Type"
+                        value={workerTypeFilter}
+                        onValueChange={setWorkerTypeFilter}
+                      >
+                        <Radio value="all">All</Radio>
+                        <Radio value="employee">Employee</Radio>
+                        <Radio value="contractor">Contractor</Radio>
+                      </RadioGroup> */}
+
+                      <RadioGroup label="Status" value={statusFilter} onValueChange={setStatusFilter}>
+                        <Radio value="all">All</Radio>
+                        <Radio value="outreached">Outreached</Radio>
+                        <Radio value="inactive">Inactive</Radio>
+                        <Radio value="failed">Failed</Radio>
+                        <Radio value="waiting">Waiting</Radio>
+                      </RadioGroup>
+
+                      {/* Commented out 'Start Date' filter */}
+                      {/* <RadioGroup
+                        label="Start Date"
+                        value={startDateFilter}
+                        onValueChange={setStartDateFilter}
+                      >
+                        <Radio value="all">All</Radio>
+                        <Radio value="last7Days">Last 7 days</Radio>
+                        <Radio value="last30Days">Last 30 days</Radio>
+                        <Radio value="last60Days">Last 60 days</Radio>
+                      </RadioGroup> */}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
               {/* Commented out the Sort button */}
               {/* <div>
@@ -544,9 +564,8 @@ export default function PricingPage() {
       // Commented out sortDescriptor
       // sortDescriptor,
       statusFilter,
-      campaignFilter,
+      // Removed dependencies: workerTypeFilter, startDateFilter, setWorkerTypeFilter, setStartDateFilter
       setStatusFilter,
-      setCampaignFilter,
       onSearchChange,
       setVisibleColumns,
     ]);
@@ -678,4 +697,3 @@ export default function PricingPage() {
       </div>
     );
   }
-

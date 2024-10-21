@@ -1,7 +1,7 @@
 import React, {forwardRef, memo} from "react";
 import {cn} from "@nextui-org/react";
 
-import {statusColorMap, type StatusOptions} from "@/app/outreach/data";
+import {statusColorMap, type StatusOptions} from "./data";
 
 export interface StatusProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
