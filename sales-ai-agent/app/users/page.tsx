@@ -606,7 +606,7 @@ export default function UsersPage() {
             </Chip>
           </div>
           <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
-            Add user
+            Add Users
           </Button>
         </div>
       );
@@ -652,7 +652,7 @@ export default function UsersPage() {
     // });
 
     return (
-      <div className="h-screen w-screen p-6">
+      <div>
         {topBar}
         <Table
           isHeaderSticky

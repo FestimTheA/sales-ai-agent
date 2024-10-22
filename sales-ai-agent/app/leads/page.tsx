@@ -44,7 +44,7 @@ import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
 import {Status} from "./Status";
 
-export default function PricingPage() {
+export default function LeadsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -607,7 +607,7 @@ export default function PricingPage() {
     // });
 
     return (
-      <div className="h-screen w-screen p-6">
+      <div>
         {topBar}
         <Table
           isHeaderSticky

@@ -640,7 +640,7 @@ export default function BlogPage() {
     // });
 
     return (
-      <div className="h-screen w-screen p-6">
+      <div>
         {topBar}
         <Table
           isHeaderSticky
