@@ -30,6 +30,7 @@ const menuItems = [
   "Add Leads",
   "Outreach",
   "Users",
+  "Test",
   "ThemeSwitch" /* Added ThemeSwitch */
 ];
 
@@ -117,6 +118,11 @@ export const Navbar = () => {
         <NavbarItem>
           <Link className="text-default-500" href="/users" size="sm">
             Users
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/test" size="sm">
+            Test
           </Link>
         </NavbarItem>
         {/* Added ThemeSwitch */}
