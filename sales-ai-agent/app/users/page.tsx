@@ -606,7 +606,7 @@ export default function UsersPage() {
             </Chip>
           </div>
           <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
-            Add Users
+            Add User
           </Button>
         </div>
       );
