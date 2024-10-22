@@ -14,6 +14,11 @@ import {
   NavbarMenuToggle,
   Link,
   Button,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Avatar,
 } from "@nextui-org/react";
 import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -56,13 +61,13 @@ export const Navbar = () => {
         {/* Toggle */}
         <NavbarMenuToggle className="ml-2 text-default-400 md:hidden" />
 
-        {/* Logo */}
+        {/* Logo
         <NavbarBrand className="mr-2 w-[40vw] md:w-auto md:max-w-fit">
           <div className="rounded-full bg-foreground text-background">
             <Logo />
           </div>
           <span className="ml-2 font-medium md:hidden">ACME</span>
-        </NavbarBrand>
+        </NavbarBrand> */}
         
        {/* Items */}
        <NavbarItem className="hidden md:flex">
@@ -130,14 +135,28 @@ export const Navbar = () => {
             Test
           </Link>
         </NavbarItem>
-        {/* Added ThemeSwitch */}
         <NavbarItem>
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="ml-2 !flex">
-          <Button radius="lg" variant="flat">
-            Sign In
-          </Button>
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Avatar
+                as="button"
+                className="transition-transform"
+                size="sm"
+                src="/festim_photo.jpg"
+              />
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem key="settings">
+                Settings
+              </DropdownItem>
+              <DropdownItem key="sign out" color="danger">
+                Sign Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarItem>
       </NavbarContent>
 
