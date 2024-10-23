@@ -1,6 +1,6 @@
 "use client";
 
-import type {Selection, /*, SortDescriptor*/} from "@nextui-org/react";
+import type {Selection, SortDescriptor} from "@nextui-org/react";
 import type {ColumnsKey, StatusOptions, Users} from "./data";
 import type {Key} from "@react-types/shared";
 
@@ -28,12 +28,13 @@ import {
 import {SearchIcon} from "@nextui-org/shared-icons";
 import React, {useMemo, useRef, useCallback, useState} from "react";
 import {Icon} from "@iconify/react";
+import {ArrowDownIcon, ArrowUpIcon} from "@/components/icons";
 import {cn} from "@nextui-org/react";
 
 // Commented CopyText as it was reliable on hidden columns
 // import {CopyText} from "@/utils/copy-text";
 // import {EyeFilledIcon} from "@/components/icons";
-import {EditLinearIcon} from "@/components/icons";
+// import {EditLinearIcon} from "@/components/icons";
 import {DeleteFilledIcon} from "@/components/icons";
 // Commented out sorting icons imports
 // import {ArrowDownIcon} from "@/components/icons";
@@ -44,6 +45,8 @@ import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
 import {Status} from "./Status";
 
+
+
 export default function LeadsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -51,12 +54,10 @@ export default function LeadsPage() {
     const [rowsPerPage] = useState(10);
     
     const [page, setPage] = useState(1);
-// Commented out sortDescriptor state variable
-    // const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    //   column: "FirstName",
-    //   direction: "ascending",
-    // });
-
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+      column: "Time",
+      direction: "descending",
+    });
 
     const [statusFilter, setStatusFilter] = React.useState("all");
     const [campaignFilter, setCampaignFilter] = React.useState("all");
@@ -64,22 +65,21 @@ export default function LeadsPage() {
     const headerColumns = useMemo(() => {
       if (visibleColumns === "all") return columns;
 
-      // Commented out sorting logic
-      // return columns
-      //   .map((item) => {
-      //     if (item.uid === sortDescriptor.column) {
-      //       return {
-      //         ...item,
-      //         sortDirection: sortDescriptor.direction,
-      //       };
-      //     }
+      return columns
+        .map((item) => {
+          if (item.uid === sortDescriptor.column) {
+            return {
+              ...item,
+              sortDirection: sortDescriptor.direction,
+            };
+          }
 
-      //     return item;
-      //   })
-      //   .filter((column) => Array.from(visibleColumns).includes(column.uid));
+          return item;
+        })
+        .filter((column) => Array.from(visibleColumns).includes(column.uid));
 
       return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-    }, [visibleColumns, /* sortDescriptor */]);
+    }, [visibleColumns, sortDescriptor]);
 
     const itemFilter = useCallback(
       (col: Users) => {
@@ -112,40 +112,27 @@ export default function LeadsPage() {
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1;
 
+    const sortedItems = useMemo(() => {
+      return [...filteredItems].sort((a: Users, b: Users) => {
+        const col = sortDescriptor.column as keyof Users;
+
+        let first = a[col];
+        let second = b[col];
+
+        const cmp = first < second ? -1 : first > second ? 1 : 0;
+
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      });
+    }, [sortDescriptor, filteredItems]);
+
     const items = useMemo(() => {
       const start = (page - 1) * rowsPerPage;
       const end = start + rowsPerPage;
 
-      return filteredItems.slice(start, end);
-    }, [page, filteredItems, rowsPerPage]);
+      return sortedItems.slice(start, end);
+    }, [page, sortedItems, rowsPerPage]);
 
     
-    // Commented out sorting logic
-    // const sortedItems = useMemo(() => {
-    //   return [...items].sort((a: Users, b: Users) => {
-    //     const col = sortDescriptor.column as keyof Users;
-
-    //     let first = a[col];
-    //     let second = b[col];
-
-    //     // Commented out special handling for 'memberInfo' and 'country'
-    //     // if (col === "memberInfo" || col === "country") {
-    //     //   first = a[col].name;
-    //     //   second = b[col].name;
-    //     // } else if (sortDescriptor.column === "externalWorkerID") {
-    //     //   first = +a.externalWorkerID.split("EXT-")[1];
-    //     //   second = +b.externalWorkerID.split("EXT-")[1];
-    //     // }
-
-    //     const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-    //     return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    //   });
-    // }, [sortDescriptor, items]);
-    
-    // Use items directly without sorting
-    const sortedItems = items;
-
     const filterSelectedKeys = useMemo(() => {
       if (selectedKeys === "all") return selectedKeys;
       let resultKeys = new Set<Key>();
@@ -168,13 +155,9 @@ export default function LeadsPage() {
     const eyesRef = useRef<HTMLButtonElement | null>(null);
     const editRef = useRef<HTMLButtonElement | null>(null);
     const deleteRef = useRef<HTMLButtonElement | null>(null);
-    const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
-    const {getButtonProps: getEditProps} = useButton({ref: editRef});
+    // const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
+    // const {getButtonProps: getEditProps} = useButton({ref: editRef});
     const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
-    // Commented out getMemberInfoProps and handleMemberClick
-    // const getMemberInfoProps = useMemoizedCallback(() => ({
-    //   onClick: handleMemberClick,
-    // }));
 
     const renderCell = useMemoizedCallback((user: Users, columnKey: React.Key) => {
       const userKey = columnKey as ColumnsKey;
@@ -182,78 +165,12 @@ export default function LeadsPage() {
       const cellValue = user[userKey as unknown as keyof Users] as string;
 
       switch (userKey) {
-        // case "workerID":
-        // case "externalWorkerID":
-        //   return <CopyText>{cellValue}</CopyText>;
-        // Commented out 'memberInfo' case
-        // case "memberInfo":
-        //   return (
-        //     <User
-        //       avatarProps={{radius: "lg", src: user[userKey].avatar}}
-        //       classNames={{
-        //         name: "text-default-foreground",
-        //         description: "text-default-500",
-        //       }}
-        //       description={user[userKey].email}
-        //       name={user[userKey].name}
-        //     >
-        //       {user[userKey].email}
-        //     </User>
-        //   );
-        // Commented out 'startDate' case
-        // case "startDate":
-        //   return (
-        //     <div className="flex items-center gap-1">
-        //       <Icon
-        //         className="h-[16px] w-[16px] text-default-300"
-        //         icon="solar:calendar-minimalistic-linear"
-        //       />
-        //       <p className="text-nowrap text-small capitalize text-default-foreground">
-        //         {new Intl.DateTimeFormat("en-US", {
-        //           month: "long",
-        //           day: "numeric",
-        //           year: "numeric",
-        //         }).format(cellValue as unknown as Date)}
-        //       </p>
-        //     </div>
-        //   );
-        // Commented out 'country' case
-        // case "country":
-        //   return (
-        //     <div className="flex items-center gap-2">
-        //       <div className="h-[16px] w-[16px]">{user[userKey].icon}</div>
-        //       <p className="text-nowrap text-small text-default-foreground">{user[userKey].name}</p>
-        //     </div>
-        //   );
-        // Commented out 'teams' case
-        // case "teams":
-        //   return (
-        //     <div className="float-start flex gap-1">
-        //       {user[userKey].map((team, index) => {
-        //         if (index < 3) {
-        //           return (
-        //             <Chip
-        //               key={team}
-        //               className="rounded-xl bg-default-100 px-[6px] capitalize text-default-800"
-        //               size="sm"
-        //               variant="flat"
-        //             >
-        //               {team}
-        //             </Chip>
-        //           );
-        //         }
-        //         if (index < 4) {
-        //           return (
-        //             <Chip key={team} className="text-default-500" size="sm" variant="flat">
-        //               {`+${team.length - 3}`}
-        //             </Chip>
-        //           );
-        //         }
-
-        //         return null;
-        //       })}
-        //     </div>
-        //   );
+        case "Time":
+          return (
+            <div className="text-nowrap text-small text-default-foreground">
+              {cellValue}
+            </div>
+          );
         case "FirstName":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
@@ -284,7 +201,7 @@ export default function LeadsPage() {
               {cellValue}
             </div>
           );
-        case "BANTTotalScore":
+        case "BANTScore":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
@@ -296,9 +213,6 @@ export default function LeadsPage() {
                 {cellValue}
               </div>
             );
-        // Commented out 'workerType' case
-        // case "workerType":
-        //   return <div className="text-default-foreground">{cellValue}</div>;
         case "status":
           return <Status status={cellValue as StatusOptions} />;
         case "actions":
@@ -310,12 +224,12 @@ export default function LeadsPage() {
                 height={18}
                 width={18}
               /> */}
-              <EditLinearIcon
+              {/* <EditLinearIcon
                 {...getEditProps()}
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
-              />
+              /> */}
               <DeleteFilledIcon
                 {...getDeleteProps()}
                 className="cursor-pointer text-default-400"
@@ -437,8 +351,7 @@ export default function LeadsPage() {
                   </DropdownMenu>
                 </Dropdown>
               </div>
-              {/* Commented out the Sort button */}
-              {/* <div>
+              <div>
                 <Dropdown>
                   <DropdownTrigger>
                     <Button
@@ -466,12 +379,21 @@ export default function LeadsPage() {
                           });
                         }}
                       >
-                        {item.name}
+                        <div className="flex items-center justify-between w-full">
+                          {item.name}
+                          {sortDescriptor.column === item.uid && (
+                            sortDescriptor.direction === "ascending" ? (
+                              <ArrowUpIcon className="text-default-500" width={16} height={16} />
+                            ) : (
+                              <ArrowDownIcon className="text-default-500" width={16} height={16} />
+                            )
+                          )}
+                        </div>
                       </DropdownItem>
                     )}
                   </DropdownMenu>
                 </Dropdown>
-              </div> */}
+              </div>
               <div>
                 <Dropdown closeOnSelect={false}>
                   <DropdownTrigger>
@@ -527,9 +449,6 @@ export default function LeadsPage() {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Selected Actions">
                   <DropdownItem key="delete-lead">Delete</DropdownItem>
-                  {/* <DropdownItem key="pay-invoices">Pay invoices</DropdownItem>
-                  <DropdownItem key="bulk-edit">Bulk edit</DropdownItem>
-                  <DropdownItem key="end-contract">End contract</DropdownItem> */}
                 </DropdownMenu>
               </Dropdown>
             )}
@@ -541,8 +460,7 @@ export default function LeadsPage() {
       visibleColumns,
       filterSelectedKeys,
       headerColumns,
-      // Commented out sortDescriptor
-      // sortDescriptor,
+      sortDescriptor,
       statusFilter,
       campaignFilter,
       setStatusFilter,
@@ -598,14 +516,6 @@ export default function LeadsPage() {
       );
     }, [filterSelectedKeys, page, pages, filteredItems.length, onPreviousPage, onNextPage]);
 
-    // Commented out handleMemberClick
-    // const handleMemberClick = useMemoizedCallback(() => {
-    //   setSortDescriptor({
-    //     column: "memberInfo",
-    //     direction: sortDescriptor.direction === "ascending" ? "descending" : "ascending",
-    //   });
-    // });
-
     return (
       <div>
         {topBar}
@@ -619,12 +529,11 @@ export default function LeadsPage() {
           }}
           selectedKeys={filterSelectedKeys}
           selectionMode="multiple"
-          // Commented out sortDescriptor and onSortChange
-          // sortDescriptor={sortDescriptor}
+          sortDescriptor={sortDescriptor}
           topContent={topContent}
           topContentPlacement="outside"
           onSelectionChange={onSelectionChange}
-          // onSortChange={setSortDescriptor}
+          onSortChange={setSortDescriptor}
         >
           <TableHeader columns={headerColumns}>
             {(column) => (
@@ -635,39 +544,11 @@ export default function LeadsPage() {
                   column.uid === "actions" ? "flex items-center justify-end px-[20px]" : "",
                 ])}
               >
-                {/* Commented out special handling for 'memberInfo' header */}
-                {/* {column.uid === "memberInfo" ? (
-                  <div
-                    {...getMemberInfoProps()}
-                    className="flex w-full cursor-pointer items-center justify-between"
-                  >
-                    {column.name}
-                    {column.sortDirection === "ascending" ? (
-                      <ArrowUpIcon className="text-default-400" />
-                    ) : (
-                      <ArrowDownIcon className="text-default-400" />
-                    )}
-                  </div>
-                ) :  */}
-                {column.info ? (
-                  <div className="flex min-w-[108px] items-center justify-between">
-                    {column.name}
-                    <Tooltip content={column.info}>
-                      <Icon
-                        className="text-default-300"
-                        height={16}
-                        icon="solar:info-circle-linear"
-                        width={16}
-                      />
-                    </Tooltip>
-                  </div>
-                ) : (
-                  column.name
-                )}
+                {column.name}
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
+          <TableBody emptyContent={"No users found"} items={items}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
