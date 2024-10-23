@@ -68,9 +68,9 @@ export const columns = [
 ];
 
 const Time = [
-  "October 10, 2024 at 10:00",
-  "October 10, 2024 at 10:05",
-  "October 10, 2024 at 10:10",
+  "October 10, 2024, 10:00",
+  "October 10, 2024, 10:05",
+  "October 10, 2024, 10:10",
 ];
 
 const FirstName = [
@@ -126,7 +126,7 @@ const Company = [
 ];
 
 const LinkedIn = [
-"linkedin.com/in/profile",
+"https://www.linkedin.com/in/festimbejtullahu/",
 ];
 
 const BANTScore = [

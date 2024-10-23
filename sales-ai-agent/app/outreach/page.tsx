@@ -52,7 +52,7 @@ export default function DocsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-    const [rowsPerPage] = useState(10);
+    const [rowsPerPage] = useState(25);  // Updated from 10 to 25
     
     const [page, setPage] = useState(1);
 // Commented out sortDescriptor state variable

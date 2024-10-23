@@ -36,6 +36,8 @@ import {cn} from "@nextui-org/react";
 // import {EyeFilledIcon} from "@/components/icons";
 // import {EditLinearIcon} from "@/components/icons";
 import {DeleteFilledIcon} from "@/components/icons";
+import {LinkedInIcon} from "@/components/icons";
+
 // Commented out sorting icons imports
 // import {ArrowDownIcon} from "@/components/icons";
 // import {ArrowUpIcon} from "@/components/icons";
@@ -51,7 +53,7 @@ export default function LeadsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-    const [rowsPerPage] = useState(10);
+    const [rowsPerPage] = useState(25);
     
     const [page, setPage] = useState(1);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -77,8 +79,6 @@ export default function LeadsPage() {
           return item;
         })
         .filter((column) => Array.from(visibleColumns).includes(column.uid));
-
-      return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
     }, [visibleColumns, sortDescriptor]);
 
     const itemFilter = useCallback(
@@ -155,9 +155,11 @@ export default function LeadsPage() {
     const eyesRef = useRef<HTMLButtonElement | null>(null);
     const editRef = useRef<HTMLButtonElement | null>(null);
     const deleteRef = useRef<HTMLButtonElement | null>(null);
+    const linkedinRef = useRef<HTMLButtonElement | null>(null);
     // const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
     // const {getButtonProps: getEditProps} = useButton({ref: editRef});
     const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
+    const {getButtonProps: getLinkedInProps} = useButton({ref: linkedinRef});
 
     const renderCell = useMemoizedCallback((user: Users, columnKey: React.Key) => {
       const userKey = columnKey as ColumnsKey;
@@ -197,8 +199,19 @@ export default function LeadsPage() {
           );
         case "LinkedIn":
           return (
-            <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
+            <div className="flex items-center gap-2">
+              <a 
+                href={cellValue} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="cursor-pointer text-default-400"
+              >
+                <LinkedInIcon
+                  {...getLinkedInProps()}
+                  height={20}
+                  width={20}
+                />
+              </a>
             </div>
           );
         case "BANTScore":
@@ -218,6 +231,12 @@ export default function LeadsPage() {
         case "actions":
           return (
             <div className="flex items-center justify-end gap-2">
+                <DeleteFilledIcon
+                {...getDeleteProps()}
+                className="cursor-pointer text-default-400"
+                height={18}
+                width={18}
+              />
               {/* <EyeFilledIcon
                 {...getEyesProps()}
                 className="cursor-pointer text-default-400"
@@ -230,13 +249,8 @@ export default function LeadsPage() {
                 height={18}
                 width={18}
               /> */}
-              <DeleteFilledIcon
-                {...getDeleteProps()}
-                className="cursor-pointer text-default-400"
-                height={18}
-                width={18}
-              />
             </div>
+          
           );
         default:
           return cellValue;
@@ -478,9 +492,9 @@ export default function LeadsPage() {
               {users.length}
             </Chip>
           </div>
-          <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
+          {/* <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
             Add Leads
-          </Button>
+          </Button> */}
         </div>
       );
     }, []);
@@ -559,4 +573,6 @@ export default function LeadsPage() {
       </div>
     );
   }
+
+
 
