@@ -131,6 +131,11 @@ export const Navbar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
+          <Link className="text-default-500" href="/extension" size="sm">
+            Extension
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
           <Link className="text-default-500" href="/test" size="sm">
             Test
           </Link>
