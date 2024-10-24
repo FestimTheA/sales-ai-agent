@@ -28,17 +28,17 @@ export type ColumnsKey =
   // | "externalWorkerID"
   // | "memberInfo"
   // | "country"
-  | "TimeCreated"
-  | "TimeLastUpdated"  
   // | "FirstName"
-  // | "LastName"  
+  // | "LastName"
   // | "JobPosition"
   // | "Company"
   // | "LinkedIn"
-  // | "BANTTotalScore" 
-  | "CampaignName" 
-  
-     
+  // | "BANTTotalScore"
+  | "id"
+  | "name"
+  | "description"
+  | "created_at"
+  | "updated_at"
   // | "workerType"
   // | "status"
   // | "startDate"
@@ -50,15 +50,15 @@ export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
   // "externalWorkerID",
   // "memberInfo",
   // "country",
-  "TimeCreated",
-  "TimeLastUpdated",
+  "created_at",
+  "updated_at",
   // "FirstName",
   // "LastName",
   // "JobPosition",
-  // "Company", 
+  // "Company",
   // "LinkedIn",
   // "BANTTotalScore",
-  "CampaignName",
+  "name",
   // "workerType",
   // "status",
   // "startDate",
@@ -71,15 +71,16 @@ export const columns = [
   // {name: "External Worker ID", uid: "externalWorkerID"},
   // {name: "Member", uid: "memberInfo", sortDirection: "ascending"},
   // {name: "Country", uid: "country"},
-  {name: "Time Created", uid: "TimeCreated"},
-  {name: "Time Last Updated", uid: "TimeLastUpdated"},
+  {name: "Time Created", uid: "created_at"},
+  {name: "Time Last Updated", uid: "updated_at"},
+  {name: "ID", uid: "id"},
   // {name: "First Name", uid: "FirstName"},
   // {name: "Last Name", uid: "LastName"},
   // {name: "Job Position", uid: "JobPosition"},
   // {name: "Company", uid: "Company"},
   // {name: "LinkedIn", uid: "LinkedIn"},
   // {name: "BANT Total Score", uid: "BANTTotalScore"},
-  {name: "Campaign Name", uid: "CampaignName"},
+  {name: "Campaign Name", uid: "name"},
   // {name: "Worker Type", uid: "workerType"},
   // {name: "Status", uid: "status", info: "The user's current status"},
   // {name: "Start Date", uid: "startDate", info: "The date the user started"},
@@ -483,9 +484,9 @@ const generateMockUserData = (count: number): Users[] => {
       //       : Math.random() > 0.5
       //         ? "Waiting"
       //         : "Inactive"
-              
-      
-              
+
+
+
       // startDate: new Date(new Date().getTime() - Math.random() * (24 * 60 * 60 * 1000 * 40)),
       // teams: [
       //   "Design",

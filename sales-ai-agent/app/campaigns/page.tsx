@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 "use client";
 
 import type {Selection, /*, SortDescriptor*/} from "@nextui-org/react";
-import type {ColumnsKey, /* StatusOptions, */ Users} from "./data";
+import type {ColumnsKey} from "./data";
 import type {Key} from "@react-types/shared";
 
 import {
@@ -20,7 +21,6 @@ import {
   RadioGroup,
   Radio,
   Chip,
-  User,
   Pagination,
   Divider,
   Tooltip,
@@ -30,7 +30,7 @@ import {
   PopoverContent,
 } from "@nextui-org/react";
 import {SearchIcon} from "@nextui-org/shared-icons";
-import React, {useMemo, useRef, useCallback, useState} from "react";
+import React, {useMemo, useRef, useCallback, useState, useEffect} from "react";
 import {Icon} from "@iconify/react";
 import {cn} from "@nextui-org/react";
 
@@ -40,12 +40,15 @@ import {cn} from "@nextui-org/react";
 import {EditLinearIcon} from "@/components/icons";
 import {DeleteFilledIcon} from "@/components/icons";
 // Commented out sorting icons imports
-// import {ArrowDownIcon} from "@/components/icons"; 
+// import {ArrowDownIcon} from "@/components/icons";
 // import {ArrowUpIcon} from "@/components/icons";
 
 import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
 
-import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
+import {columns, INITIAL_VISIBLE_COLUMNS} from "./data";
+
+import { callApiFromClient } from "@/utils/client-api-service";
+import { Campaign } from "@/types";
 // import {Status} from "./Status";
 
 export default function BlogPage() {
@@ -53,15 +56,16 @@ export default function BlogPage() {
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [rowsPerPage] = useState(10);
-    
+
     const [page, setPage] = useState(1);
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 // Commented out sortDescriptor state variable
     // const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     //   column: "FirstName",
     //   direction: "ascending",
     // });
 
-  
+
     // Commented out unused filters
     // const [workerTypeFilter, setWorkerTypeFilter] = React.useState("all");
     const [statusFilter, setStatusFilter] = React.useState("all");
@@ -88,7 +92,7 @@ export default function BlogPage() {
     }, [visibleColumns, /* sortDescriptor */]);
 
     const itemFilter = useCallback(
-      (col: Users) => {
+      (col: Campaign) => {
         // Commented out unused filters
         // let allWorkerType = workerTypeFilter === "all";
         let allStatus = statusFilter === "all";
@@ -96,7 +100,7 @@ export default function BlogPage() {
 
         return (
           // (allWorkerType || workerTypeFilter === col.workerType.toLowerCase()) &&
-          (allStatus || statusFilter === col.CampaignName.toLowerCase())
+          (allStatus || statusFilter === col.name.toLowerCase())
           // &&
           // (allStartDate ||
           //   new Date(
@@ -109,18 +113,18 @@ export default function BlogPage() {
     );
 
     const filteredItems = useMemo(() => {
-      let filteredUsers = [...users];
+      let filteredCampaigns = [...campaigns];
 
       if (filterValue) {
-        filteredUsers = filteredUsers.filter((user) =>
+        filteredCampaigns = filteredCampaigns.filter((campaign) =>
           // Updated to search by 'FirstName' instead of 'memberInfo'
-          user.CampaignName.toLowerCase().includes(filterValue.toLowerCase()),
+        campaign.name.toLowerCase().includes(filterValue.toLowerCase()),
         );
       }
 
-      filteredUsers = filteredUsers.filter(itemFilter);
+      filteredCampaigns = filteredCampaigns.filter(itemFilter);
 
-      return filteredUsers;
+      return filteredCampaigns;
     }, [filterValue, itemFilter]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1;
@@ -132,7 +136,7 @@ export default function BlogPage() {
       return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
-    
+
     // Commented out sorting logic
     // const sortedItems = useMemo(() => {
     //   return [...items].sort((a: Users, b: Users) => {
@@ -155,7 +159,7 @@ export default function BlogPage() {
     //     return sortDescriptor.direction === "descending" ? -cmp : cmp;
     //   });
     // }, [sortDescriptor, items]);
-    
+
     // Use items directly without sorting
     const sortedItems = items;
 
@@ -189,12 +193,12 @@ export default function BlogPage() {
     //   onClick: handleMemberClick,
     // }));
 
-    const renderCell = useMemoizedCallback((user: Users, columnKey: React.Key) => {
-      const userKey = columnKey as ColumnsKey;
+    const renderCell = useMemoizedCallback((campaign: Campaign, columnKey: React.Key) => {
+      const campaignKey = columnKey as ColumnsKey;
 
-      const cellValue = user[userKey as unknown as keyof Users] as string;
+      const cellValue = campaign[campaignKey as unknown as keyof Campaign] as string;
 
-      switch (userKey) {
+      switch (campaignKey) {
         // case "workerID":
         // case "externalWorkerID":
         //   return <CopyText>{cellValue}</CopyText>;
@@ -267,18 +271,23 @@ export default function BlogPage() {
         //       })}
         //     </div>
         //   );
-        case "TimeCreated":
+        case "created_at":
+        case "updated_at":
+          const date = new Date(cellValue);
+          const formattedDate = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          });
+
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
-              {cellValue}
+              {formattedDate}
             </div>
           );
-          case "TimeLastUpdated":
-            return (
-              <div className="text-nowrap text-small capitalize text-default-foreground">
-                {cellValue}
-              </div>
-            );
         // case "FirstName":
         //   return (
         //     <div className="text-nowrap text-small capitalize text-default-foreground">
@@ -315,12 +324,12 @@ export default function BlogPage() {
         //       {cellValue}
         //     </div>
         //   );
-          case "CampaignName":
-            return (
-              <div className="text-nowrap text-small capitalize text-default-foreground">
-                {cellValue}
-              </div>
-            );
+        case "name":
+          return (
+            <div className="text-nowrap text-small capitalize text-default-foreground">
+              {cellValue}
+            </div>
+          );
         // Commented out 'workerType' case
         // case "workerType":
         //   return <div className="text-default-foreground">{cellValue}</div>;
@@ -590,7 +599,7 @@ export default function BlogPage() {
           <div className="flex w-[226px] items-center gap-2">
             <h1 className="text-2xl font-[700] leading-[32px]">Campaigns</h1>
             <Chip className="hidden items-center text-default-500 sm:flex" size="sm" variant="flat">
-              {users.length}
+              {campaigns.length}
             </Chip>
           </div>
           <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
@@ -639,6 +648,21 @@ export default function BlogPage() {
     //   });
     // });
 
+    useEffect(() => {
+      const fetchCampaigns = async () => {
+        try {
+          const response = await callApiFromClient("campaigns");
+          const result = await response.json();
+
+          setCampaigns(result);
+        } catch (error) {
+          console.error('Failed to fetch data:', error);
+        }
+      };
+
+      fetchCampaigns();
+    }, []);
+
     return (
       <div>
         {topBar}
@@ -682,7 +706,7 @@ export default function BlogPage() {
                     )}
                   </div>
                 ) :  */}
-                {column.info ? (
+                {/* {column.info ? (
                   <div className="flex min-w-[108px] items-center justify-between">
                     {column.name}
                     <Tooltip content={column.info}>
@@ -696,11 +720,12 @@ export default function BlogPage() {
                   </div>
                 ) : (
                   column.name
-                )}
+                )} */}
+                {column.name}
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
+          <TableBody emptyContent={"No campaigns found"} items={campaigns}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
