@@ -18,7 +18,7 @@ export const statusColorMap: Record<StatusOptions, JSX.Element> = {
 
 export type Users = {
   id: number;
-  Time: string;
+  TimeSourced: string;
   FirstName: string;
   LastName: string;
   JobPosition: string;
@@ -30,7 +30,7 @@ export type Users = {
 };
 
 export type ColumnsKey =
-  | "Time"
+  | "TimeSourced"
   | "FirstName"
   | "LastName"  
   | "JobPosition"
@@ -42,7 +42,7 @@ export type ColumnsKey =
   | "actions";
 
 export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
-  "Time",
+  "TimeSourced",
   "FirstName",
   "LastName",
   "JobPosition",
@@ -55,7 +55,7 @@ export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
 ];
 
 export const columns = [
-  {name: "Time", uid: "Time"},
+  {name: "Time Sourced", uid: "TimeSourced"},
   {name: "First Name", uid: "FirstName"},
   {name: "Last Name", uid: "LastName"},
   {name: "Job Position", uid: "JobPosition"},
@@ -67,7 +67,7 @@ export const columns = [
   {name: "Actions", uid: "actions"},
 ];
 
-const Time = [
+const TimeSourced = [
   "October 10, 2024, 10:00",
   "October 10, 2024, 10:05",
   "October 10, 2024, 10:10",
@@ -151,7 +151,7 @@ const generateMockUserData = (count: number): Users[] => {
   const mockData: Users[] = [];
 
   for (let i = 0; i < count; i++) {
-    const selectedRole1 = Time[Math.floor(Math.random() * Time.length)];
+    const selectedRole1 = TimeSourced[Math.floor(Math.random() * TimeSourced.length)];
     const selectedRole2 = FirstName[Math.floor(Math.random() * FirstName.length)];
     const selectedRole3 = LastName[Math.floor(Math.random() * LastName.length)];
     const selectedRole4 = JobPosition[Math.floor(Math.random() * JobPosition.length)];
@@ -162,7 +162,7 @@ const generateMockUserData = (count: number): Users[] => {
 
     const user: Users = {
       id: i,
-      Time: selectedRole1,
+      TimeSourced: selectedRole1,
       FirstName: selectedRole2,
       LastName: selectedRole3,
       JobPosition: selectedRole4,

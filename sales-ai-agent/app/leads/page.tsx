@@ -37,13 +37,7 @@ import {cn} from "@nextui-org/react";
 // import {EditLinearIcon} from "@/components/icons";
 import {DeleteFilledIcon} from "@/components/icons";
 import {LinkedInIcon} from "@/components/icons";
-
-// Commented out sorting icons imports
-// import {ArrowDownIcon} from "@/components/icons";
-// import {ArrowUpIcon} from "@/components/icons";
-
 import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
-
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
 import {Status} from "./Status";
 
@@ -57,7 +51,7 @@ export default function LeadsPage() {
     
     const [page, setPage] = useState(1);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-      column: "Time",
+      column: "TimeSourced",
       direction: "descending",
     });
 
@@ -167,7 +161,7 @@ export default function LeadsPage() {
       const cellValue = user[userKey as unknown as keyof Users] as string;
 
       switch (userKey) {
-        case "Time":
+        case "TimeSourced":
           return (
             <div className="text-nowrap text-small text-default-foreground">
               {cellValue}
@@ -462,6 +456,7 @@ export default function LeadsPage() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Selected Actions">
+                  <DropdownItem key="delete-lead">Download</DropdownItem>
                   <DropdownItem key="delete-lead">Delete</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -562,7 +557,7 @@ export default function LeadsPage() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={items}>
+          <TableBody emptyContent={"No leads found"} items={items}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
