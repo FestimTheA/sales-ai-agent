@@ -33,7 +33,14 @@ export default function Component() {
           sameSite: "Lax",
           secure: process.env.NODE_ENV === "production",
         });
-        router.push("/company-info");
+        Cookies.set("user-id", result.id, {
+          expires: 7,
+          path: "/",
+          sameSite: "Lax",
+          secure: process.env.NODE_ENV === "production",
+        });
+
+        router.push("/campaigns");
       }
     } catch (error) {
       console.error("Failed to fetch data:", error);
