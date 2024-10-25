@@ -10,7 +10,7 @@ export default function Component() {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-full w-full center justify-center">
       <div className="w-full max-w-lg">
         <h1 className="text-2xl font-[700] leading-[32px] mb-4">Sign In</h1>
         <div className="flex w-full flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
