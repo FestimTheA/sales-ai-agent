@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Removes default focus rings and outlines. Example: A blue outline around the row, checkbox, switch used to show when a icon, link, or switch was clicked */ 
+:root {
+  --tw-ring-offset-width: 0px;
+}
+
+.outline-none {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
+.group[data-focus-visible=true] {
+  .group-data-\[focus-visible\=true\]\:ring-offset-2 {
+    --tw-ring-offset-width: 0px !important;
+  }
+  .group-data-\[focus-visible\=true\]\:ring-focus {
+    --tw-ring-opacity: 0 !important;
+    --tw-ring-color: transparent !important;
+  }
+}
+
+
