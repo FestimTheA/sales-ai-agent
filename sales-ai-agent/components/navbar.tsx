@@ -20,7 +20,7 @@ import {
   DropdownItem,
   Avatar,
 } from "@nextui-org/react";
-import { Logo } from "@/components/icons";
+// import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
 
 const menuItems = [
@@ -85,8 +85,8 @@ export const Navbar = () => {
             Forgot Password?
           </Link>
         </NavbarItem>
-        <NavbarItem isActive>
-          <Link aria-current="page" color="foreground" href="/company-info" size="sm">
+        <NavbarItem>
+          <Link className="text-default-500" href="/company-info" size="sm">
             Company Info
           </Link>
         </NavbarItem>
@@ -128,6 +128,11 @@ export const Navbar = () => {
         <NavbarItem>
           <Link className="text-default-500" href="/add-user" size="sm">
             Add User
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/modal" size="sm">
+            Modal
           </Link>
         </NavbarItem>
         <NavbarItem>
