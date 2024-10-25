@@ -24,19 +24,21 @@ import {
 import { ThemeSwitch } from "@/components/theme-switch";
 
 const menuItems = [
-  "Create Account",
-  "Sign In",
-  "Forgot Password?",
-  "User Info",
+  // "Create Account",
+  // "Sign In",
+  // "Forgot Password?",
+  // "User Info",
   "Sales AI Agent",
   "Campaigns",
-  "Create Campaign",
+  // "Create Campaign",
   "Leads",
-  "Add Leads",
   "Outreach",
   "Users",
+  // "Add User",
+  // "Modal",
+  // "Extension",
   "Test",
-  "ThemeSwitch" /* Added ThemeSwitch */
+  "ThemeSwitch"
 ];
 
 // This was the original code but it didn't work
@@ -70,7 +72,7 @@ export const Navbar = () => {
         </NavbarBrand> */}
         
        {/* Items */}
-       <NavbarItem className="hidden md:flex">
+       {/* <NavbarItem className="hidden md:flex">
           <Link className="text-default-500" href="/create-account" size="sm">
             Create Account
           </Link>
@@ -89,7 +91,7 @@ export const Navbar = () => {
           <Link className="text-default-500" href="/company-info" size="sm">
             Company Info
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <Link className="text-default-500" href="/sales-ai-agent" size="sm">
             Sales AI Agent
@@ -100,19 +102,14 @@ export const Navbar = () => {
             Campaigns
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link className="text-default-500" href="/create-campaign" size="sm">
             Create Campaign
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <Link className="text-default-500" href="/leads" size="sm">
             Leads
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link className="text-default-500" href="/add-leads" size="sm">
-            Add Leads
           </Link>
         </NavbarItem>
         <NavbarItem>
@@ -125,7 +122,7 @@ export const Navbar = () => {
             Users
           </Link>
         </NavbarItem>
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link className="text-default-500" href="/add-user" size="sm">
             Add User
           </Link>
@@ -139,7 +136,7 @@ export const Navbar = () => {
           <Link className="text-default-500" href="/extension" size="sm">
             Extension
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <Link className="text-default-500" href="/test" size="sm">
             Test
@@ -159,10 +156,10 @@ export const Navbar = () => {
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="settings">
+              <DropdownItem key="settings" href="/settings">
                 Settings
               </DropdownItem>
-              <DropdownItem key="sign out" color="danger">
+              <DropdownItem key="sign out" color="danger" href="/sign-in">
                 Sign Out
               </DropdownItem>
             </DropdownMenu>
