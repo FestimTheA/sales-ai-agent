@@ -45,6 +45,7 @@ import {DeleteFilledIcon} from "@/components/icons";
 import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
 
 import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
+import Link from 'next/link';
 
 export default function LeadsPage() {
     const [filterValue, setFilterValue] = useState("");
@@ -455,9 +456,11 @@ export default function LeadsPage() {
               {users.length}
             </Chip>
           </div>
-          <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
-            Create Campaign
-          </Button>
+          <Link href="/create-campaign">
+            <Button color="primary" endContent={<Icon icon="solar:add-circle-bold" width={20} />}>
+              Create Campaign
+            </Button>
+          </Link>
         </div>
       );
     }, []);

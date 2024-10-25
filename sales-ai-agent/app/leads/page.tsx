@@ -146,8 +146,8 @@ export default function LeadsPage() {
       return resultKeys;
     }, [selectedKeys, filteredItems, filterValue]);
 
-    const eyesRef = useRef<HTMLButtonElement | null>(null);
-    const editRef = useRef<HTMLButtonElement | null>(null);
+    // const eyesRef = useRef<HTMLButtonElement | null>(null);
+    // const editRef = useRef<HTMLButtonElement | null>(null);
     const deleteRef = useRef<HTMLButtonElement | null>(null);
     const linkedinRef = useRef<HTMLButtonElement | null>(null);
     // const {getButtonProps: getEyesProps} = useButton({ref: eyesRef});
