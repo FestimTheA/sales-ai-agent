@@ -37,7 +37,7 @@ const menuItems = [
   // "Add User",
   // "Modal",
   // "Extension",
-  "Test",
+  // "Test",
   "ThemeSwitch"
 ];
 
@@ -137,11 +137,11 @@ export const Navbar = () => {
             Extension
           </Link>
         </NavbarItem> */}
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link className="text-default-500" href="/test" size="sm">
             Test
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <ThemeSwitch />
         </NavbarItem>
