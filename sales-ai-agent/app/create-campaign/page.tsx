@@ -1,187 +1,185 @@
 "use client";
 
 import React from "react";
-import {Input, Textarea, Autocomplete, AutocompleteItem, Chip, Button} from "@nextui-org/react";
-import {animals} from "./data";
+import {Autocomplete, AutocompleteItem, Chip, Input, Button, Select, SelectItem, Textarea} from "@nextui-org/react";
+import {JobPositions, locations, industries} from "./data";
 
-export default function Page() {
-  const [selectedAnimals1, setSelectedAnimals1] = React.useState<string[]>([]);
-  const [selectedAnimals2, setSelectedAnimals2] = React.useState<string[]>([]);
-  const [selectedAnimals3, setSelectedAnimals3] = React.useState<string[]>([]);
-  const [numberOfLeads, setNumberOfLeads] = React.useState("");
+export default function App() {
   const [description, setDescription] = React.useState("");
-  const [showLeadsMessage, setShowLeadsMessage] = React.useState(false);
+  
 
-  const handleSelectionChange1 = (selectedItems) => {
-    setSelectedAnimals1(Array.from(selectedItems));
-  };
+  // This keeps track of what the user has selected for each category
+  const [selectedValues, setSelectedValues] = React.useState<{
+    jobPositions: (string | number)[],
+    locations: (string | number)[],
+    industries: (string | number)[]
+  }>({
+    jobPositions: [],
+    locations: [],
+    industries: []
+  });
 
-  const handleSelectionChange2 = (selectedItems) => {
-    setSelectedAnimals2(Array.from(selectedItems));
-  };
-
-  const handleSelectionChange3 = (selectedItems) => {
-    setSelectedAnimals3(Array.from(selectedItems));
-  };
-
-  const handleClose1 = (animalToRemove) => {
-    setSelectedAnimals1(selectedAnimals1.filter(animal => animal !== animalToRemove));
-  };
-
-  const handleClose2 = (animalToRemove) => {
-    setSelectedAnimals2(selectedAnimals2.filter(animal => animal !== animalToRemove));
-  };
-
-  const handleClose3 = (animalToRemove) => {
-    setSelectedAnimals3(selectedAnimals3.filter(animal => animal !== animalToRemove));
-  };
-
-  const handleNumberOfLeadsChange = (event) => {
-    const value = event.target.value;
-    setNumberOfLeads(value);
-    setShowLeadsMessage(value !== "");
-  };
-
-  const handleDescriptionChange = (event) => {
-    const text = event.target.value;
-    if (text.length <= 300) {
-      setDescription(text);
+  // This function adds a new selection to the list when the user picks something
+  const handleSelectionChange = (category: keyof typeof selectedValues) => (selectedValue: string | number | null) => {
+    if (selectedValue) {
+      setSelectedValues((prevValues) => ({
+        ...prevValues,
+        [category]: prevValues[category].includes(selectedValue)
+          ? prevValues[category]
+          : [...prevValues[category], selectedValue]
+      }));
     }
   };
 
+  // This function removes a selection when the user clicks the 'x' on a chip
+  const handleClose = (category: keyof typeof selectedValues, valueToRemove: string | number) => {
+    setSelectedValues((prevValues) => ({
+      ...prevValues,
+      [category]: prevValues[category].filter(value => value !== valueToRemove)
+    }));
+  };
+
+  // This function handles what happens when the user presses keys in the search box
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, items: typeof JobPositions, category: keyof typeof selectedValues) => {
+    if (event.key === "Enter") {
+      const input = event.target as HTMLInputElement;
+      // Find options that match what the user typed
+      const visibleOptions = items.filter(item => 
+        item.label.toLowerCase().includes(input.value.toLowerCase())
+      );
+      // If there's exactly one match, select it automatically
+      if (visibleOptions.length === 1) {
+        handleSelectionChange(category)(visibleOptions[0].value);
+        input.value = "";
+      }
+    }
+  };
+
+  // This function creates the search box and the chips for each category
+  const renderAutocomplete = (
+    label: string,
+    category: keyof typeof selectedValues,
+    items: typeof JobPositions
+  ) => (
+    <>
+      <Autocomplete
+        label={label}
+        variant="bordered"
+        defaultItems={items}
+        placeholder={`Search for a ${label.toLowerCase()}`}
+        onSelectionChange={handleSelectionChange(category)}
+        disabledKeys={selectedValues[category]}
+        onKeyDown={(e) => handleKeyDown(e, items, category)}
+      >
+        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+      </Autocomplete>
+      
+      {/* Show the selected items as little removable tags (chips). Chip padding applies only if there are any selected items. */}
+      <div className={`flex flex-wrap gap-2 ${selectedValues[category].length > 0 ? 'pt-3 pb-0' : ''}`}>
+        {selectedValues[category].map((value) => (
+          <Chip key={value} onClose={() => handleClose(category, value)} variant="flat">
+            {value}
+          </Chip>
+        ))}
+      </div>
+    </>
+  );
+
+  // This is the main part that decides how the page looks
+  const [numberOfLeads, setNumberOfLeads] = React.useState("");
+  const [showLeadsMessage, setShowLeadsMessage] = React.useState(false);
+
+  const handleNumberOfLeadsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberOfLeads(e.target.value);
+    setShowLeadsMessage(e.target.value !== "");
+  };
+
   const handleSave = () => {
-    // Add your save logic here
+    // Implement save functionality here
     console.log("Saving campaign...");
-    console.log("Number of Leads to source:", numberOfLeads);
   };
 
   return (
-    <>
-      {/* Create Campaign Section */}
-      <div className="mb-[18px] flex items-center justify-between">
-        <div className="flex w-[226px] items-center gap-2">
-          <h1 className="text-2xl font-[700] leading-[32px]">Create Campaign</h1>
-        </div>
-      </div>
+    <div className="flex h-full w-full justify-center">
+      <div className="w-full max-w-lg">
 
-      <div className="flex w-full max-w-lg flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
-        <Input type="text" label="Campaign Name" placeholder="Enter your campaign name" variant="bordered" />
-        <div>
-          <Textarea
-            label="Description"
-            placeholder="Enter your description"
-            variant="bordered"
-            value={description}
-            onChange={handleDescriptionChange}
-            maxLength={300}
+        {/* Create Campaign Section */}
+        <div className="mb-[18px] flex items-center justify-between">
+          <div className="flex w-[226px] items-center gap-2">
+            <h1 className="text-2xl font-[700] leading-[32px]">Create Campaign</h1>
+          </div>
+        </div>
+
+        <div className="flex w-full max-w-lg flex-col gap-3 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
+          <Input 
+            type="text" 
+            label="Campaign Name" 
+            placeholder="Enter your campaign name" 
+            variant="bordered" 
+            isRequired
           />
-          <p className="text-small text-default-400 mt-2">
-            Character count: {description.length}/300
-          </p>
+          <div>
+            <Textarea
+              label="Connection Note"
+              placeholder="Enter your connection note"
+              variant="bordered"
+              isRequired
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={300}
+            />
+            <p className="text-small text-default-500 mt-2">
+              Character count: {description.length}/300
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Add Leads Section */}
-      <div className="mt-8 mb-[18px] flex items-center justify-between">
-        <div className="flex w-[226px] items-center gap-2">
-          <h1 className="text-2xl font-[700] leading-[32px]">Add Leads</h1>
-        </div>
-      </div>
-
-      <div className="flex w-full max-w-lg flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
-        {/* First Animals Autocomplete */}
-        <Autocomplete
-          label="Favorite Animal 1"
-          placeholder="Search an animal"
-          defaultItems={animals}
-          onSelectionChange={handleSelectionChange1}
-          selectedKeys={selectedAnimals1}
-          selectionMode="multiple"
-          variant="bordered"
-        >
-          {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-        </Autocomplete>
-        {selectedAnimals1.length > 0 && (
-          <div className="flex gap-2 mt-4 flex-wrap">
-            {selectedAnimals1.map((animal) => (
-              <Chip key={animal} onClose={() => handleClose1(animal)} variant="bordered">
-                {animal}
-              </Chip>
-            ))}
+        {/* Add Leads Section */}
+        <h1 className="text-2xl font-[700] leading-[32px] mb-4 mt-6">Add Leads</h1>
+        <div className="flex w-full flex-col gap-3 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
+          <div>
+            {/* Create search boxes for job positions, locations, and industries */}
+            {renderAutocomplete("Job Position", "jobPositions", JobPositions)}
           </div>
-        )}
-
-        {/* Second Animals Autocomplete */}
-        <Autocomplete
-          label="Favorite Animal 2"
-          placeholder="Search an animal"
-          defaultItems={animals}
-          onSelectionChange={handleSelectionChange2}
-          selectedKeys={selectedAnimals2}
-          selectionMode="multiple"
-          variant="bordered"
-        >
-          {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-        </Autocomplete>
-        {selectedAnimals2.length > 0 && (
-          <div className="flex gap-2 mt-4 flex-wrap">
-            {selectedAnimals2.map((animal) => (
-              <Chip key={animal} onClose={() => handleClose2(animal)} variant="bordered">
-                {animal}
-              </Chip>
-            ))}
+          <div>
+            {renderAutocomplete("Location", "locations", locations)}
           </div>
-        )}
-
-        {/* Third Animals Autocomplete */}
-        <Autocomplete
-          label="Favorite Animal 3"
-          placeholder="Search an animal"
-          defaultItems={animals}
-          onSelectionChange={handleSelectionChange3}
-          selectedKeys={selectedAnimals3}
-          selectionMode="multiple"
-          variant="bordered"
-        >
-          {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-        </Autocomplete>
-        {selectedAnimals3.length > 0 && (
-          <div className="flex gap-2 mt-4 flex-wrap">
-            {selectedAnimals3.map((animal) => (
-              <Chip key={animal} onClose={() => handleClose3(animal)} variant="bordered">
-                {animal}
-              </Chip>
-            ))}
+          <div>
+            {renderAutocomplete("Industry", "industries", industries)}
           </div>
-        )}
 
-        {/* Available Leads Info */}
-        <p className="text-small text-default-500 mt-4">
-          Based on these filters, there are 10,000 available leads.
-        </p>
+          {/* Available Leads Info */}
+          <div>
+            <p className="text-small text-default-500">
+              Based on these filters, there are 10,000 available leads.
+            </p>
+          </div>
 
-        {/* Number of Leads Input */}
-        <Input
-          type="number"
-          label="Number of Leads to source"
-          placeholder="Enter number of leads"
-          value={numberOfLeads}
-          onChange={handleNumberOfLeadsChange}
-          variant="bordered"
-          className="w-full"
-        />
-
-        {showLeadsMessage && (
-          <p className="text-small text-default-500 mt-2">
-            {numberOfLeads} new leads will be added to this campaign
+          {/* Number of Leads Input */}
+          <div>
+            <Input
+              isRequired
+              className="pb-1"
+              type="number"
+              label="Number of Leads to Source"
+              placeholder="Enter number of leads to source"
+              value={numberOfLeads}
+              onChange={handleNumberOfLeadsChange}
+              variant="bordered"
+            />
+            {showLeadsMessage && (
+              <p className="text-small text-default-500 mt-2 mb-1">
+                {numberOfLeads} new leads will be added to this campaign
           </p>
         )}
 
-        {/* Save Button */}
-        <Button color="primary" onClick={handleSave} className="mt-4">
-          Save Campaign
-        </Button>
+            {/* Creat Button */}
+            <Button color="primary" onClick={handleSave} className="mt-2 w-full">
+              Create Campaign
+            </Button>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
