@@ -300,7 +300,7 @@ export default function UsersPage() {
                     ])}
                     selectionMode="single"
                   >
-                    <DropdownSection title="Campaign">
+                    <DropdownSection title="Role">
                       <DropdownItem key="role-all" onPress={() => setRoleFilter("all")}>All</DropdownItem>
                       <DropdownItem key="Admin" onPress={() => setRoleFilter("Admin")}>Admin</DropdownItem>
                       <DropdownItem key="Editor" onPress={() => setRoleFilter("Editor")}>Editor</DropdownItem>

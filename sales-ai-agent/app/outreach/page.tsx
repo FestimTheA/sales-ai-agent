@@ -347,10 +347,9 @@ export default function LeadsPage() {
                   >
                     <DropdownSection title="Status">
                       <DropdownItem key="status-all" onPress={() => setStatusFilter("all")}>All</DropdownItem>
-                      <DropdownItem key="Outreached" onPress={() => setStatusFilter("Outreached")}>Outreached</DropdownItem>
-                      <DropdownItem key="Inactive" onPress={() => setStatusFilter("Inactive")}>Inactive</DropdownItem>
-                      <DropdownItem key="Failed" onPress={() => setStatusFilter("Failed")}>Failed</DropdownItem>
-                      <DropdownItem key="Waiting" onPress={() => setStatusFilter("Waiting")}>Waiting</DropdownItem>
+                      <DropdownItem key="Responded" onPress={() => setStatusFilter("Responded")}>Responded</DropdownItem>
+                      <DropdownItem key="Accepted" onPress={() => setStatusFilter("Accepted")}>Accepted</DropdownItem>
+                      <DropdownItem key="No Response" onPress={() => setStatusFilter("No Response")}>No Response</DropdownItem>
                     </DropdownSection> 
                     <DropdownSection title="Campaign">
                       <DropdownItem key="campaign-all" onPress={() => setCampaignFilter("all")}>All</DropdownItem>
