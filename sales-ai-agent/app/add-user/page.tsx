@@ -12,11 +12,27 @@ export default function Component() {
         <h1 className="text-2xl font-[700] leading-[32px] mb-4">Add User</h1>
         <div className="flex w-full flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
           <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+          <Input
+              isRequired
+              label="First Name"
+              name="firstName"
+              placeholder="Enter first name"
+              type="text"
+              variant="bordered"
+            />
+            <Input
+              isRequired
+              label="Last Name"
+              name="lastName"
+              placeholder="Enter last name"
+              type="text"
+              variant="bordered"
+            />
             <Input
               isRequired
               label="Email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Enter email"
               type="email"
               variant="bordered"
             />
@@ -24,7 +40,7 @@ export default function Component() {
               isRequired
               items={roles}
               label="Role"
-              placeholder="Select a role"
+              placeholder="Select role"
               variant="bordered"
             >
               {(role) => <SelectItem key={role.key}>{role.label}</SelectItem>}
