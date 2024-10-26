@@ -1,48 +1,64 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + NextUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "The Office AI",
+  description: "Autonomous sales AI agent for LinkedIn.",
   navItems: [
     {
       label: "Home",
       href: "/",
     },
     {
-      label: "Outreach",
-      href: "/docs",
-    },
-    {
-      label: "Leads",
-      href: "/pricing",
+      label: "Sales AI Agent",
+      href: "/sales-ai-agent",
     },
     {
       label: "Campaigns",
-      href: "/blog",
-    },
-    {
-      label: "Users",
-      href: "/users",
-    },
-    {
-      label: "Sidebar",
-      href: "/about",
+      href: "/campaigns",
     },
     {
       label: "Create Campaign",
       href: "/create-campaign",
     },
     {
+      label: "Leads",
+      href: "/leads",
+    },
+    {
+      label: "Outreach",
+      href: "/outreach",
+    },
+    {
+      label: "Users",
+      href: "/users",
+    },
+    {
+      label: "Profile",
+      href: "/profile",
+    },
+    {
+      label: "User Info",
+      href: "/user-info",
+    },
+    {
       label: "Create Account",
       href: "/create-account",
+    },
+    {
+      label: "Company Info",
+      href: "/company-info",
     },
     {
       label: "Sign In",
       href: "/sign-in",
     },
     {
-      label: "User Info",
-      href: "/user-info",
+      label: "Forgot Password",
+      href: "/forgot-password",
+    },
+    {
+      label: "Settings",
+      href: "/settings",
     },
   ],
   navMenuItems: [
