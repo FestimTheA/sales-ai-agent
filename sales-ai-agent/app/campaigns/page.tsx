@@ -51,7 +51,7 @@ import Link from 'next/link';
 import { callApiFromClient } from "@/utils/client-api-service";
 // import {Status} from "./Status";
 
-export default function LeadsPage() {
+export default function CampaignsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
