@@ -520,6 +520,10 @@ export default function CampaignsPage() {
       const fetchCampaigns = async () => {
         try {
           const response = await callApiFromClient("campaigns");
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
           const result = await response.json();
 
           setCampaigns(result);

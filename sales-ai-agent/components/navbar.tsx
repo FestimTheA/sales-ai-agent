@@ -1,25 +1,26 @@
 "use client";
 
 // Removed this import
-// import type {NavbarProps} from "@nextui-org/react"; 
+// import type {NavbarProps} from "@nextui-org/react";
 
 import React from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import {
   Navbar as NextUINavbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
   Link,
-  Button,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
   Avatar,
 } from "@nextui-org/react";
+
 // import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
 
@@ -38,8 +39,8 @@ const menuItems = [
   // "Add User",
   // "Modal",
   // "Extension",
-  "Test",
-  "ThemeSwitch"
+  // "Test",
+  "ThemeSwitch",
 ];
 
 // This was the original code but it didn't work
@@ -48,6 +49,14 @@ const menuItems = [
 //     <Navbar
 //       {...props}
 export const Navbar = () => {
+  const router = useRouter();
+
+  const signOut = () => {
+    Cookies.remove("jwt");
+    Cookies.remove("user-id");
+    router.push("/sign-in");
+  };
+
   return (
     <NextUINavbar
       classNames={{
@@ -71,9 +80,9 @@ export const Navbar = () => {
           </div>
           <span className="ml-2 font-medium md:hidden">ACME</span>
         </NavbarBrand> */}
-        
-       {/* Items */}
-       {/* <NavbarItem className="hidden md:flex">
+
+        {/* Items */}
+        {/* <NavbarItem className="hidden md:flex">
           <Link className="text-default-500" href="/create-account" size="sm">
             Create Account
           </Link>
@@ -165,7 +174,7 @@ export const Navbar = () => {
               <DropdownItem key="settings" href="/settings">
                 Settings
               </DropdownItem>
-              <DropdownItem key="sign out" color="danger" href="/sign-in">
+              <DropdownItem key="sign out" color="danger" onClick={signOut}>
                 Sign Out
               </DropdownItem>
             </DropdownMenu>
@@ -177,9 +186,9 @@ export const Navbar = () => {
       <NavbarMenu
         className="top-[calc(var(--navbar-height)/2)] mx-auto mt-16 max-h-[40vh] max-w-[80vw] rounded-large border-small border-default-200/20 bg-background/60 py-6 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
         motionProps={{
-          initial: {opacity: 0, y: -20},
-          animate: {opacity: 1, y: 0},
-          exit: {opacity: 0, y: -20},
+          initial: { opacity: 0, y: -20 },
+          animate: { opacity: 1, y: 0 },
+          exit: { opacity: 0, y: -20 },
           transition: {
             ease: "easeInOut",
             duration: 0.2,
@@ -192,7 +201,11 @@ export const Navbar = () => {
             {item === "ThemeSwitch" ? (
               <ThemeSwitch />
             ) : (
-              <Link className="w-full text-default-500" href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} size="md">
+              <Link
+                className="w-full text-default-500"
+                href={`/${item.toLowerCase().replace(/\s+/g, "-")}`}
+                size="md"
+              >
                 {item}
               </Link>
             )}

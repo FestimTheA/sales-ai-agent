@@ -27,18 +27,15 @@ export default function Component() {
       if (response.ok) {
         const result = await response.json();
 
-        Cookies.set("jwt", result.token, {
+        const cookiesOptions = {
           expires: 7,
           path: "/",
-          sameSite: "Lax",
+          // sameSite: "Lax",
           secure: process.env.NODE_ENV === "production",
-        });
-        Cookies.set("user-id", result.id, {
-          expires: 7,
-          path: "/",
-          sameSite: "Lax",
-          secure: process.env.NODE_ENV === "production",
-        });
+        };
+
+        Cookies.set("jwt", result.token, cookiesOptions);
+        Cookies.set("user-id", result.token, cookiesOptions);
 
         router.push("/campaigns");
       }
