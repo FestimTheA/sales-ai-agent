@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import {Button, Input, Checkbox, Link, Divider} from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 
 export default function Component() {
   return (

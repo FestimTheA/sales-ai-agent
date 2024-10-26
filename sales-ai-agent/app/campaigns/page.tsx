@@ -1,8 +1,10 @@
+/* eslint-disable import/order */
+/* eslint-disable prettier/prettier */
 "use client";
 
-import type {Selection, SortDescriptor} from "@nextui-org/react";
-import type {ColumnsKey, Users} from "./data";
-import type {Key} from "@react-types/shared";
+import type {Selection, /*, SortDescriptor*/} from "@nextui-org/react";
+import type {ColumnsKey} from "./data";
+import type {Key, SortDescriptor} from "@react-types/shared";
 
 import {
   Dropdown,
@@ -18,19 +20,18 @@ import {
   Input,
   Button,
   Chip,
-  User,
   Pagination,
   Divider,
-  Tooltip,
   useButton,
   DropdownSection,
   Switch,
 } from "@nextui-org/react";
 import {SearchIcon} from "@nextui-org/shared-icons";
-import React, {useMemo, useRef, useCallback, useState} from "react";
-import {Icon} from "@iconify/react";
-import {ArrowDownIcon, ArrowUpIcon} from "@/components/icons";
-import {cn} from "@nextui-org/react";
+import React, {useMemo, useRef, useCallback, useState, useEffect} from "react";
+import { Icon } from "@iconify/react";
+import { cn } from "@nextui-org/react";
+
+import { ArrowDownIcon, ArrowUpIcon } from "@/components/icons";
 
 // Commented CopyText as it was reliable on hidden columns
 // import {CopyText} from "@/utils/copy-text";
@@ -44,21 +45,28 @@ import {DeleteFilledIcon} from "@/components/icons";
 
 import {useMemoizedCallback} from "@/hooks/use-memoized-callback";
 
-import {columns, INITIAL_VISIBLE_COLUMNS, users} from "./data";
+import {columns, INITIAL_VISIBLE_COLUMNS, Campaign} from "./data";
 import Link from 'next/link';
+
+import { callApiFromClient } from "@/utils/client-api-service";
+// import {Status} from "./Status";
 
 export default function LeadsPage() {
     const [filterValue, setFilterValue] = useState("");
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [rowsPerPage] = useState(25);
-    
+
     const [page, setPage] = useState(1);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
       column: "Time Created",
       direction: "descending",
     });
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
+
+    // Commented out unused filters
+    // const [workerTypeFilter, setWorkerTypeFilter] = React.useState("all");
     const [statusFilter, setStatusFilter] = React.useState("all");
     const [campaignFilter, setCampaignFilter] = React.useState("all");
 
@@ -80,39 +88,41 @@ export default function LeadsPage() {
     }, [visibleColumns, sortDescriptor]);
 
     const itemFilter = useCallback(
-      (col: Users) => {
+      (col: Campaign) => {
+        // Commented out unused filters
+        // let allWorkerType = workerTypeFilter === "all";
         let allStatus = statusFilter === "all";
         let allCampaign = campaignFilter === "all";
 
         return (
           (allStatus || statusFilter === col.status) &&
-          (allCampaign || campaignFilter === col.CampaignName)
+          (allCampaign || campaignFilter === col.name)
         );
       },
       [statusFilter, campaignFilter],
     );
 
     const filteredItems = useMemo(() => {
-      let filteredUsers = [...users];
+      let filteredCampaigns = [...campaigns];
 
       if (filterValue) {
-        filteredUsers = filteredUsers.filter((user) =>
-          Object.values(user).some((value) =>
+        filteredCampaigns = filteredCampaigns.filter((campaign) =>
+          Object.values(campaign).some((value) =>
             String(value).toLowerCase().includes(filterValue.toLowerCase())
           )
         );
       }
 
-      filteredUsers = filteredUsers.filter(itemFilter);
+      filteredCampaigns = filteredCampaigns.filter(itemFilter);
 
-      return filteredUsers;
+      return filteredCampaigns;
     }, [filterValue, itemFilter]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage) || 1;
 
     const sortedItems = useMemo(() => {
-      return [...filteredItems].sort((a: Users, b: Users) => {
-        const col = sortDescriptor.column as keyof Users;
+      return [...filteredItems].sort((a: Campaign, b: Campaign) => {
+        const col = sortDescriptor.column as keyof Campaign;
 
         let first = a[col];
         let second = b[col];
@@ -130,7 +140,6 @@ export default function LeadsPage() {
       return sortedItems.slice(start, end);
     }, [page, sortedItems, rowsPerPage]);
 
-    
     const filterSelectedKeys = useMemo(() => {
       if (selectedKeys === "all") return selectedKeys;
       let resultKeys = new Set<Key>();
@@ -159,43 +168,54 @@ export default function LeadsPage() {
     const {getButtonProps: getDeleteProps} = useButton({ref: deleteRef});
     // const {getButtonProps: getLinkedInProps} = useButton({ref: linkedinRef});
 
-    const renderCell = useMemoizedCallback((user: Users, columnKey: React.Key) => {
-      const userKey = columnKey as ColumnsKey;
+    const renderCell = useMemoizedCallback((campaign: Campaign, columnKey: React.Key) => {
+      const campaignKey = columnKey as ColumnsKey;
 
-      const cellValue = user[userKey as unknown as keyof Users] as string;
+      const cellValue = campaign[campaignKey as unknown as keyof Campaign] as string;
 
-      switch (userKey) {
-        case "TimeCreated":
+      switch (campaignKey) {
+        case "created_at":
+        case "updated_at":
+          const date = new Date(cellValue);
+          const formattedDate = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          });
+
           return (
-            <div className="text-nowrap text-small text-default-foreground">
-              {cellValue}
+            <div className="text-nowrap text-small capitalize text-default-foreground">
+              {formattedDate}
             </div>
           );
-          case "CampaignName":
-            return (
-              <div className="text-nowrap text-small capitalize text-default-foreground">
-                {cellValue}
-              </div>
-            );
-        case "Sourced":
+        case "name":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
           );
-        case "Outreached":
+        case "sourced":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
           );
-        case "Accepted":
+        case "outreached":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
             </div>
           );
-        case "Responded":
+        case "accepted":
+          return (
+            <div className="text-nowrap text-small capitalize text-default-foreground">
+              {cellValue}
+            </div>
+          );
+        case "responded":
           return (
             <div className="text-nowrap text-small capitalize text-default-foreground">
               {cellValue}
@@ -317,8 +337,8 @@ export default function LeadsPage() {
                       Filter: {" "}
                       {campaignFilter === "all" ? "All" : `Campaign: ${campaignFilter}`}
                     </Button>
-                  </DropdownTrigger>  
-                  <DropdownMenu 
+                  </DropdownTrigger>
+                  <DropdownMenu
                     selectedKeys={new Set([
                       campaignFilter !== "all" ? campaignFilter : "campaign-all"
                     ])}
@@ -453,7 +473,7 @@ export default function LeadsPage() {
           <div className="flex w-[226px] items-center gap-2">
             <h1 className="text-2xl font-[700] leading-[32px]">Campaigns</h1>
             <Chip className="hidden items-center text-default-500 sm:flex" size="sm" variant="flat">
-              {users.length}
+              {campaigns.length}
             </Chip>
           </div>
           <Link href="/create-campaign">
@@ -496,6 +516,22 @@ export default function LeadsPage() {
       );
     }, [filterSelectedKeys, page, pages, filteredItems.length, onPreviousPage, onNextPage]);
 
+    useEffect(() => {
+      const fetchCampaigns = async () => {
+        try {
+          const response = await callApiFromClient("campaigns");
+          const result = await response.json();
+
+          setCampaigns(result);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to fetch data:', error);
+        }
+      };
+
+      fetchCampaigns();
+    }, []);
+
     return (
       <div>
         {topBar}
@@ -528,14 +564,15 @@ export default function LeadsPage() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No campaigns found"} items={items}>
-            {(item) => {
-              const isSelected = filterSelectedKeys === "all" || filterSelectedKeys.has(String(item.id));
+          <TableBody emptyContent={"No campaigns found"} items={campaigns}>
+            {(campaign) => {
+              const isSelected = filterSelectedKeys === "all" || filterSelectedKeys.has(String(campaign.id));
+
               return (
-                <TableRow key={item.id} data-selected={isSelected}>
+                <TableRow key={campaign.id} data-selected={isSelected}>
                   {(columnKey) => (
                     <TableCell data-selected={isSelected}>
-                      {renderCell(item, columnKey)}
+                      {renderCell(campaign, columnKey)}
                     </TableCell>
                   )}
                 </TableRow>
