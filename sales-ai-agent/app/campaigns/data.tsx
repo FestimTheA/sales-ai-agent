@@ -7,7 +7,7 @@ export type Campaign = {
   responded: number;
   status: string; // "On" | "Off";
   created_at: Date;
-  updated_at: string;
+  updated_at: Date;
 };
 
 export type ColumnsKey =
