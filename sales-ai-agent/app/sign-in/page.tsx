@@ -4,9 +4,6 @@ import React, { FormEvent } from "react";
 import { Button, Input, Checkbox, Link, Divider } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-
-import { callApiFromClient } from "@/utils/client-api-service";
 
 export default function Component() {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -19,25 +16,19 @@ export default function Component() {
     e.preventDefault();
 
     try {
-      const response = await callApiFromClient("login", {
+      const res = await fetch("/api/sign-in", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ email, password }),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-
-        const cookiesOptions = {
-          expires: 7,
-          path: "/",
-          // sameSite: "Lax",
-          secure: process.env.NODE_ENV === "production",
-        };
-
-        Cookies.set("jwt", result.token, cookiesOptions);
-        Cookies.set("user-id", result.token, cookiesOptions);
-
-        router.push("/campaigns");
+      if (res.ok) {
+        // Slight delay to ensure cookie is set
+        setTimeout(() => router.push("/campaigns"), 100);
+      } else {
+        console.error("Login failed");
       }
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -113,7 +104,7 @@ export default function Component() {
             </Button>
           </div>
           <p className="text-left text-small">
-            You don't have an account?&nbsp;
+            You don"t have an account?&nbsp;
             <Link href="create-account" size="sm">
               Create Account
             </Link>

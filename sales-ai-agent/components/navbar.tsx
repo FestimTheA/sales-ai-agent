@@ -4,7 +4,6 @@
 // import type {NavbarProps} from "@nextui-org/react";
 
 import React from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import {
   Navbar as NextUINavbar,
@@ -51,9 +50,8 @@ const menuItems = [
 export const Navbar = () => {
   const router = useRouter();
 
-  const signOut = () => {
-    Cookies.remove("jwt");
-    Cookies.remove("user-id");
+  const signOut = async () => {
+    await fetch("/api/sign-out", { method: "POST" });
     router.push("/sign-in");
   };
 
