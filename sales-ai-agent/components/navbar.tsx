@@ -29,6 +29,7 @@ const menuItems = [
   // "Forgot Password?",
   // "User Info",
   "Sales AI Agent",
+  "Dashboard",
   "Campaigns",
   // "Create Campaign",
   "Leads",
@@ -95,6 +96,11 @@ export const Navbar = () => {
         <NavbarItem>
           <Link className="text-default-500" href="/sales-ai-agent" size="sm">
             Sales AI Agent
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link className="text-default-500" href="/dashboard" size="sm">
+            Dashboard
           </Link>
         </NavbarItem>
         <NavbarItem>

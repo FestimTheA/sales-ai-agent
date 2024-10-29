@@ -205,7 +205,7 @@ export default function LeadsPage() {
           return (
             <div>
               <Switch
-                defaultSelected={cellValue === "Off"}
+                defaultSelected={cellValue === "On"}
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
