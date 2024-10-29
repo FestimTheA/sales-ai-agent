@@ -96,7 +96,7 @@ export default function Component() {
               Sign In
             </Button>
           </form>
-          <div className="flex items-center gap-4 py-2">
+          {/* <div className="flex items-center gap-4 py-2">
             <Divider className="flex-1" />
             <p className="shrink-0 text-tiny text-default-500">OR</p>
             <Divider className="flex-1" />
@@ -108,7 +108,7 @@ export default function Component() {
             >
               Sign In with Google
             </Button>
-          </div>
+          </div> */}
           <p className="text-left text-small">
             You don"t have an account?&nbsp;
             <Link href="create-account" size="sm">
