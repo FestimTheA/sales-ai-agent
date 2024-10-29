@@ -1,117 +1,142 @@
 "use client";
 
-import React from "react";
+import type { Key } from "@react-types/shared";
+
+import React, { MouseEventHandler } from "react";
 import {
   Autocomplete,
   AutocompleteItem,
   Chip,
   Input,
   Button,
-  Select,
-  SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { JobPositions, locations, industries } from "./data";
+import { useRouter } from "next/navigation";
+
+import { JobPositions, industries, locations } from "./data";
 
 export default function App() {
-  const [note, setNote] = React.useState("");
+  const router = useRouter();
+
   const [name, setName] = React.useState("");
+  const [note, setNote] = React.useState("");
 
-  // This keeps track of what the user has selected for each category
-  const [selectedValues, setSelectedValues] = React.useState<{
-    jobPositions: (string | number)[];
-    locations: (string | number)[];
-    industries: (string | number)[];
-  }>({
-    jobPositions: [],
-    locations: [],
-    industries: [],
-  });
+  // eslint-disable-next-line prettier/prettier
+  const [selectedJobPositions, setSelectedJobPositions] = React.useState<string[]>([]);
+  // eslint-disable-next-line prettier/prettier
+  const [selectedLocations, setSelectedLocations] = React.useState<string[]>([]);
+  // eslint-disable-next-line prettier/prettier
+  const [selectedIndustries, setSelectedIndustries] = React.useState<string[]>([]);
 
-  // This function adds a new selection to the list when the user picks something
-  const handleSelectionChange =
-    (category: keyof typeof selectedValues) =>
-    (selectedValue: string | number | null) => {
-      if (selectedValue) {
-        setSelectedValues((prevValues) => ({
-          ...prevValues,
-          [category]: prevValues[category].includes(selectedValue)
-            ? prevValues[category]
-            : [...prevValues[category], selectedValue],
-        }));
-      }
-    };
-
-  // This function removes a selection when the user clicks the 'x' on a chip
-  const handleClose = (
-    category: keyof typeof selectedValues,
-    valueToRemove: string | number,
+  const handleSelectedJobPositionsChange = (
+    selectedJobPosition: Key | null,
   ) => {
-    setSelectedValues((prevValues) => ({
-      ...prevValues,
-      [category]: prevValues[category].filter(
-        (value) => value !== valueToRemove,
-      ),
-    }));
+    if (selectedJobPosition) {
+      const selectedJobPositionStr = selectedJobPosition.toString();
+
+      setSelectedJobPositions((prevJobPositions) =>
+        prevJobPositions.includes(selectedJobPositionStr)
+          ? prevJobPositions
+          : [...prevJobPositions, selectedJobPositionStr],
+      );
+    }
   };
 
-  // This function handles what happens when the user presses keys in the search box
-  const handleKeyDown = (
+  const handleSelectedLocationsChange = (selectedLocation: Key | null) => {
+    if (selectedLocation) {
+      const selectedLocationStr = selectedLocation.toString();
+
+      setSelectedLocations((prevLocations) =>
+        prevLocations.includes(selectedLocationStr)
+          ? prevLocations
+          : [...prevLocations, selectedLocationStr],
+      );
+    }
+  };
+
+  const handleSelectedIndustriesChange = (selectedIndustry: Key | null) => {
+    if (selectedIndustry) {
+      const selectedIndustryStr = selectedIndustry.toString();
+
+      setSelectedIndustries((prevIndustries) =>
+        prevIndustries.includes(selectedIndustryStr)
+          ? prevIndustries
+          : [...prevIndustries, selectedIndustryStr],
+      );
+    }
+  };
+
+  const handleJobPositionChipClose = (valueToRemove: string) => {
+    setSelectedJobPositions((prevJobPositions) =>
+      prevJobPositions.filter((value) => value !== valueToRemove),
+    );
+  };
+
+  const handleLocationChipClose = (valueToRemove: string) => {
+    setSelectedLocations((prevLocations) =>
+      prevLocations.filter((value) => value !== valueToRemove),
+    );
+  };
+
+  const handleIndustryChipClose = (valueToRemove: string) => {
+    setSelectedIndustries((prevIndustries) =>
+      prevIndustries.filter((value) => value !== valueToRemove),
+    );
+  };
+
+  const handleJobPositionKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
-    items: typeof JobPositions,
-    category: keyof typeof selectedValues,
   ) => {
     if (event.key === "Enter") {
       const input = event.target as HTMLInputElement;
       // Find options that match what the user typed
-      const visibleOptions = items.filter((item) =>
+      const visibleOptions = JobPositions.filter((item) =>
         item.label.toLowerCase().includes(input.value.toLowerCase()),
       );
+
       // If there's exactly one match, select it automatically
       if (visibleOptions.length === 1) {
-        handleSelectionChange(category)(visibleOptions[0].value);
+        handleSelectedJobPositionsChange(visibleOptions[0].value);
         input.value = "";
       }
     }
   };
 
-  // This function creates the search box and the chips for each category
-  const renderAutocomplete = (
-    label: string,
-    category: keyof typeof selectedValues,
-    items: typeof JobPositions,
-  ) => (
-    <>
-      <Autocomplete
-        defaultItems={items}
-        disabledKeys={selectedValues[category]}
-        label={label}
-        placeholder={`Search for a ${label.toLowerCase()}`}
-        variant="bordered"
-        onKeyDown={(e) => handleKeyDown(e, items, category)}
-        onSelectionChange={handleSelectionChange(category)}
-      >
-        {(item) => (
-          <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
-        )}
-      </Autocomplete>
+  const handleLocationKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") {
+      const input = event.target as HTMLInputElement;
+      // Find options that match what the user typed
+      const visibleOptions = locations.filter((item) =>
+        item.label.toLowerCase().includes(input.value.toLowerCase()),
+      );
 
-      {/* Show the selected items as little removable tags (chips). Chip padding applies only if there are any selected items. */}
-      <div
-        className={`flex flex-wrap gap-2 ${selectedValues[category].length > 0 ? "pt-3 pb-0" : ""}`}
-      >
-        {selectedValues[category].map((value) => (
-          <Chip
-            key={value}
-            variant="flat"
-            onClose={() => handleClose(category, value)}
-          >
-            {value}
-          </Chip>
-        ))}
-      </div>
-    </>
-  );
+      // If there's exactly one match, select it automatically
+      if (visibleOptions.length === 1) {
+        handleSelectedLocationsChange(visibleOptions[0].value);
+        input.value = "";
+      }
+    }
+  };
+
+  const handleIndustryKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") {
+      const input = event.target as HTMLInputElement;
+      // Find options that match what the user typed
+      const visibleOptions = industries.filter((item) =>
+        item.label.toLowerCase().includes(input.value.toLowerCase()),
+      );
+
+      // If there's exactly one match, select it automatically
+      if (visibleOptions.length === 1) {
+        handleSelectedIndustriesChange(visibleOptions[0].value);
+        input.value = "";
+      }
+    }
+  };
 
   // This is the main part that decides how the page looks
   const [numberOfLeads, setNumberOfLeads] = React.useState("");
@@ -124,9 +149,37 @@ export default function App() {
     setShowLeadsMessage(e.target.value !== "");
   };
 
-  const handleSave = () => {
-    // Implement save functionality here
-    console.log("Saving campaign...");
+  const handleCreateCampaign = async () => {
+    try {
+      const res = await fetch("/api/campaigns", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          note,
+          numberOfLeads,
+          jobPositions: selectedJobPositions,
+          locations: selectedLocations,
+          industries: selectedIndustries,
+        }),
+      });
+
+      if (res.ok) {
+        router.push("/campaigns");
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(`HTTP error! Status: ${res.status}`);
+        const result = await res.json();
+
+        // eslint-disable-next-line no-console
+        console.error(result);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch data:", error);
+    }
   };
 
   return (
@@ -162,22 +215,107 @@ export default function App() {
               onChange={(e) => setNote(e.target.value)}
             />
             <p className="text-small text-default-500 mt-2">
-              Character count: {note.length}/1000
+              Character count: {note.length}/300
             </p>
           </div>
         </div>
 
-        {/* Add Leads Section */}
         <h1 className="text-2xl font-[700] leading-[32px] mb-4 mt-6">
           Add Leads
         </h1>
         <div className="flex w-full flex-col gap-3 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
           <div>
-            {/* Create search boxes for job positions, locations, and industries */}
-            {renderAutocomplete("Job Position", "jobPositions", JobPositions)}
+            <Autocomplete
+              defaultItems={JobPositions}
+              disabledKeys={selectedJobPositions}
+              label={"Job Position"}
+              placeholder={"Search for a job position"}
+              variant="bordered"
+              onKeyDown={handleJobPositionKeyDown}
+              onSelectionChange={handleSelectedJobPositionsChange}
+            >
+              {(item) => (
+                <AutocompleteItem key={item.value}>
+                  {item.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+
+            <div
+              className={`flex flex-wrap gap-2 ${selectedJobPositions.length > 0 ? "pt-3 pb-0" : ""}`}
+            >
+              {selectedJobPositions.map((value) => (
+                <Chip
+                  key={value}
+                  variant="flat"
+                  onClose={() => handleJobPositionChipClose(value)}
+                >
+                  {value}
+                </Chip>
+              ))}
+            </div>
           </div>
-          <div>{renderAutocomplete("Location", "locations", locations)}</div>
-          <div>{renderAutocomplete("Industry", "industries", industries)}</div>
+          <div>
+            <Autocomplete
+              defaultItems={locations}
+              disabledKeys={selectedLocations}
+              label={"Location"}
+              placeholder={"Search for a location"}
+              variant="bordered"
+              onKeyDown={handleLocationKeyDown}
+              onSelectionChange={handleSelectedLocationsChange}
+            >
+              {(item) => (
+                <AutocompleteItem key={item.value}>
+                  {item.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+
+            <div
+              className={`flex flex-wrap gap-2 ${selectedLocations.length > 0 ? "pt-3 pb-0" : ""}`}
+            >
+              {selectedLocations.map((value) => (
+                <Chip
+                  key={value}
+                  variant="flat"
+                  onClose={() => handleLocationChipClose(value)}
+                >
+                  {value}
+                </Chip>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Autocomplete
+              defaultItems={industries}
+              disabledKeys={selectedIndustries}
+              label={"Industry"}
+              placeholder={"Search for an industry"}
+              variant="bordered"
+              onKeyDown={handleIndustryKeyDown}
+              onSelectionChange={handleSelectedIndustriesChange}
+            >
+              {(item) => (
+                <AutocompleteItem key={item.value}>
+                  {item.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+            <div
+              className={`flex flex-wrap gap-2 ${selectedIndustries.length > 0 ? "pt-3 pb-0" : ""}`}
+            >
+              {selectedIndustries.map((value) => (
+                <Chip
+                  key={value}
+                  variant="flat"
+                  onClose={() => handleIndustryChipClose(value)}
+                >
+                  {value}
+                </Chip>
+              ))}
+            </div>
+          </div>
 
           {/* Available Leads Info */}
           <div>
@@ -208,7 +346,7 @@ export default function App() {
             <Button
               className="mt-2 w-full"
               color="primary"
-              onClick={handleSave}
+              onClick={handleCreateCampaign}
             >
               Create Campaign
             </Button>

@@ -6,8 +6,7 @@ import { Campaign } from "./data";
 
 export default async function CampaignsPage() {
   const fetchCampaigns = async () => {
-    const cookieStore = cookies();
-    const token = cookieStore.get("jwt")?.value;
+    const token = cookies().get("jwt")?.value;
 
     if (!token) {
       redirect("/sign-in");
