@@ -36,6 +36,5 @@ export default async function CampaignsPage() {
   };
 
   const campaigns: Campaign[] = await fetchCampaigns();
-
   return <CampaignsTable campaigns={campaigns} />;
 }

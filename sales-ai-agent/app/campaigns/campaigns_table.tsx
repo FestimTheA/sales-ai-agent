@@ -229,7 +229,7 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
           return (
             <div>
               <Switch
-                defaultSelected={cellValue === "Off"}
+                defaultSelected={cellValue === "On"}
                 onClick={(e) => e.stopPropagation()}
               />
             </div>

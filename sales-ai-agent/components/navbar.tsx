@@ -65,7 +65,7 @@ export const Navbar = () => {
       height="54px"
     >
       <NavbarContent
-        className="gap-4 rounded-2xl border-small border-default-200/20 bg-background/60 px-2 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
+        className="gap-4 rounded-2xl border-small border-default-200/20 bg-background/60 px-5 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
         justify="center"
       >
         {/* Toggle */}

@@ -29,9 +29,9 @@ export default function Component() {
       body: JSON.stringify({ email, password, website, name: companyName }),
     });
 
-    if (response.ok) {
-      const result = await response.json();
+    const result = await response.json();
 
+    if (response.ok) {
       Cookies.set("jwt", result.token, {
         expires: 7,
         path: "/",
@@ -47,7 +47,10 @@ export default function Component() {
 
       router.push("/campaigns");
     } else {
+      // eslint-disable-next-line no-console
       console.error(`HTTP error! Status: ${response.status}`);
+      // eslint-disable-next-line no-console
+      console.error(`HTTP message: ${result['error']}`)
     }
   }
 

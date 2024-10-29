@@ -28,9 +28,15 @@ export default function Component() {
         // Slight delay to ensure cookie is set
         setTimeout(() => router.push("/campaigns"), 100);
       } else {
-        console.error("Login failed");
+        // eslint-disable-next-line no-console
+        console.error(`HTTP error! Status: ${res.status}`);
+        const result = await res.json();
+
+        // eslint-disable-next-line no-console
+        console.error(`HTTP message: ${result["error"]}`);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Failed to fetch data:", error);
     }
   };
