@@ -26,7 +26,7 @@ export default function Component() {
 
       if (res.ok) {
         // Slight delay to ensure cookie is set
-        setTimeout(() => router.push("/campaigns"), 100);
+        setTimeout(() => router.push("/campaigns"), 500);
       } else {
         // eslint-disable-next-line no-console
         console.error(`HTTP error! Status: ${res.status}`);
