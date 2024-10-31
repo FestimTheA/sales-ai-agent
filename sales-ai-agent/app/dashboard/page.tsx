@@ -4,6 +4,19 @@
 
 import { ResponsiveFunnel } from '@nivo/funnel'
 import { data } from './data'
+import type {Selection} from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Input,
+  DropdownSection,
+} from "@nextui-org/react";
+import {SearchIcon} from "@nextui-org/shared-icons";
+import {Icon} from "@iconify/react";
+import React, {useState, useMemo} from "react";
 
 // Define the type for Funnel Data
 type FunnelData = {
@@ -14,10 +27,11 @@ type FunnelData = {
 
 // Funnel Chart 
 const MyResponsiveFunnel = ({ data }: { data: FunnelData[] }) => (
-    <div style={{ height: '65vh' }}>
+    // Height is required or chart won't appear
+    <div style={{ height: '64vh' }} className="relative"> 
         <ResponsiveFunnel
             data={data}
-            margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+            margin={{ top: 40, right: 40, bottom: 80, left: 40 }} // Increased margin bottom to make room for color legend
             direction="horizontal"
             shapeBlending={0.1}
             valueFormat=" >-,.4~r"
@@ -68,9 +82,9 @@ const MyResponsiveFunnel = ({ data }: { data: FunnelData[] }) => (
             currentBorderWidth={40}
             motionConfig="wobbly"
         />
-
-        {/* Color Legend at bottom of Funnel Chart */}
-        <div className="mt-4 flex gap-4 justify-center" style={{ fontSize: "var(--nextui-font-size-small)" }}>
+        
+        {/* Color legend positioned absolutely at bottom of chart */}
+        <div className="absolute bottom-0 left-0 right-0 flex gap-4 justify-center" style={{ fontSize: "var(--nextui-font-size-small)" }}>
             <div className="flex items-center gap-2">
                 <div style={{ width: '12px', height: '12px', backgroundColor: '#6ea9d7', borderRadius: '3px' }}></div>
                 <span>Sourced</span>
@@ -93,18 +107,62 @@ const MyResponsiveFunnel = ({ data }: { data: FunnelData[] }) => (
 
 // Page Layout
 export default function Page() {
+    const [statusFilter, setStatusFilter] = React.useState("all");
+    const [campaignFilter, setCampaignFilter] = React.useState("all");
+
+    // Filter logic
+    const filteredData = useMemo(() => {
+        let filtered = [...data];
+
+        if (statusFilter !== "all") {
+            filtered = filtered.filter(item => item.label === statusFilter);
+        }
+
+        if (campaignFilter !== "all") {
+            // Add campaign filtering logic here if needed
+        }
+
+        return filtered;
+    }, [statusFilter, campaignFilter]);
+
     return (
         <>
-            {/* Title */}
-            <div className="mb-[18px] flex items-center justify-between">
+            <div className="mb-[22px]">
                 <div className="flex w-[226px] items-center gap-2">
                     <h1 className="text-2xl font-[700] leading-[32px]">Dashboard</h1>
                 </div>
             </div>
-            {/* Funnel Chart Container */}
-            <div className="p-4 z-0 flex flex-col relative justify-between gap-4 bg-content1 overflow-auto rounded-large shadow-small w-full" 
-                 style={{ height: 'calc(100vh - 200px)' }}>
-                <MyResponsiveFunnel data={data} />
+            
+            <div className="mb-5">
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button
+                            className="bg-default-100 text-default-800"
+                            size="sm"
+                            startContent={
+                                <Icon className="text-default-400" icon="solar:tuning-2-linear" width={16} />
+                            }
+                        >
+                            Filter: {statusFilter === "all" ? "All" : statusFilter}
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu 
+                        selectedKeys={new Set([statusFilter])}
+                        selectionMode="single"
+                    >
+                        <DropdownSection title="Status">
+                            <DropdownItem key="all" onPress={() => setStatusFilter("all")}>All</DropdownItem>
+                            <DropdownItem key="Sourced" onPress={() => setStatusFilter("Sourced")}>Sourced</DropdownItem>
+                            <DropdownItem key="Outreached" onPress={() => setStatusFilter("Outreached")}>Outreached</DropdownItem>
+                            <DropdownItem key="Accepted" onPress={() => setStatusFilter("Accepted")}>Accepted</DropdownItem>
+                            <DropdownItem key="Responded" onPress={() => setStatusFilter("Responded")}>Responded</DropdownItem>
+                        </DropdownSection>
+                    </DropdownMenu>
+                </Dropdown>
+            </div>
+
+            <div className="p-4 z-0 flex flex-col relative justify-between gap-4 bg-content1 overflow-auto rounded-large shadow-small w-full"> 
+                <MyResponsiveFunnel data={filteredData} />
             </div>
         </>
     );
