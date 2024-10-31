@@ -4,17 +4,14 @@
 
 import { ResponsiveFunnel } from '@nivo/funnel'
 import { data } from './data'
-import type {Selection} from "@nextui-org/react";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
   Button,
-  Input,
   DropdownSection,
 } from "@nextui-org/react";
-import {SearchIcon} from "@nextui-org/shared-icons";
 import {Icon} from "@iconify/react";
 import React, {useState, useMemo} from "react";
 
@@ -23,6 +20,7 @@ type FunnelData = {
   id: string
   value: number
   label: string
+  campaign: string
 }
 
 // Funnel Chart 
@@ -107,34 +105,62 @@ const MyResponsiveFunnel = ({ data }: { data: FunnelData[] }) => (
 
 // Page Layout
 export default function Page() {
-    const [statusFilter, setStatusFilter] = React.useState("all");
+    // State management for filters
     const [campaignFilter, setCampaignFilter] = React.useState("all");
+    const [userFilter, setUserFilter] = React.useState("all");
 
-    // Filter logic
+    // useMemo hook to compute and cache filtered data
+    // Only recomputes when campaignFilter or userFilter changes
     const filteredData = useMemo(() => {
-        let filtered = [...data];
+        // Helper function to transform and filter the data
+        const transformData = () => {
+            let result: FunnelData[] = [];
+            
+            // Iterate through each step (Sourced, Outreached, Accepted, Responded)
+            Object.entries(data.steps).forEach(([stepId, step]) => {
+                let totalValue = 0;
+                
+                // First level: iterate through campaigns
+                Object.entries(data.metrics).forEach(([campaignId, campaignData]) => {
+                    // Check if this campaign should be included based on filter
+                    if (campaignFilter === "all" || (data.campaigns as any)[campaignId].name === campaignFilter) {
+                        // Second level: iterate through users in each campaign
+                        Object.entries(campaignData).forEach(([userId, userData]) => {
+                            // Check if this user should be included based on filter
+                            if (userFilter === "all" || (data.users as any)[userId].name === userFilter) {
+                                // Add the value for this step from this user/campaign combination
+                                totalValue += (userData as any)[stepId].value;
+                            }
+                        });
+                    }
+                });
 
-        if (statusFilter !== "all") {
-            filtered = filtered.filter(item => item.label === statusFilter);
-        }
+                // Push the aggregated data for this step to the result array
+                result.push({
+                    id: step.label,
+                    label: step.label,
+                    value: totalValue,
+                    campaign: campaignFilter
+                });
+            });
+            return result;
+        };
 
-        if (campaignFilter !== "all") {
-            // Add campaign filtering logic here if needed
-        }
-
-        return filtered;
-    }, [statusFilter, campaignFilter]);
+        return transformData();
+    }, [campaignFilter, userFilter]);
 
     return (
         <>
-            <div className="mb-[22px]">
+            <div className="mb-[18px] flex items-center justify-between">
                 <div className="flex w-[226px] items-center gap-2">
-                    <h1 className="text-2xl font-[700] leading-[32px]">Dashboard</h1>
+                    <h1 className="text-2xl font-[700] leading-[32px]"> Dashboard</h1>
                 </div>
             </div>
-            
-            <div className="mb-5">
+
+            {/* Filter Dropdown */}
+            <div className="flex items-center gap-4 overflow-auto pt-[4px] pr-[6px] pb-[20px] pl-[6px]"> 
                 <Dropdown>
+                    {/* Button that shows current filter state */}
                     <DropdownTrigger>
                         <Button
                             className="bg-default-100 text-default-800"
@@ -143,24 +169,61 @@ export default function Page() {
                                 <Icon className="text-default-400" icon="solar:tuning-2-linear" width={16} />
                             }
                         >
-                            Filter: {statusFilter === "all" ? "All" : statusFilter}
+                            {/* Use a single string for the dynamic filter label */}
+                            {`Filter: ${
+                                campaignFilter === "all" && userFilter === "all"
+                                    ? "All"
+                                    : `${campaignFilter !== "all" ? `Campaign: ${campaignFilter}` : ""}${
+                                          campaignFilter !== "all" && userFilter !== "all" ? ", " : ""
+                                      }${userFilter !== "all" ? `User: ${userFilter}` : ""}`
+                            }`}
                         </Button>
                     </DropdownTrigger>
+
+                    {/* Dropdown menu with filter options */}
                     <DropdownMenu 
-                        selectedKeys={new Set([statusFilter])}
+                        selectedKeys={new Set([
+                            campaignFilter !== "all" ? campaignFilter : "campaign-all",
+                            userFilter !== "all" ? userFilter : "user-all"
+                        ])}
                         selectionMode="single"
                     >
-                        <DropdownSection title="Status">
-                            <DropdownItem key="all" onPress={() => setStatusFilter("all")}>All</DropdownItem>
-                            <DropdownItem key="Sourced" onPress={() => setStatusFilter("Sourced")}>Sourced</DropdownItem>
-                            <DropdownItem key="Outreached" onPress={() => setStatusFilter("Outreached")}>Outreached</DropdownItem>
-                            <DropdownItem key="Accepted" onPress={() => setStatusFilter("Accepted")}>Accepted</DropdownItem>
-                            <DropdownItem key="Responded" onPress={() => setStatusFilter("Responded")}>Responded</DropdownItem>
+                        {/* Campaign filter section */}
+                        <DropdownSection title="Campaign">
+                            {[
+                                <DropdownItem key="campaign-all" onPress={() => setCampaignFilter("all")}>All</DropdownItem>,
+                                // Dynamically generate campaigns from data
+                                ...Object.values(data.campaigns).map(campaign => (
+                                    <DropdownItem 
+                                        key={campaign.name} 
+                                        onPress={() => setCampaignFilter(campaign.name)}
+                                    >
+                                        {campaign.name}
+                                    </DropdownItem>
+                                ))
+                            ]}
+                        </DropdownSection>
+
+                        {/* User filter section */}
+                        <DropdownSection title="User">
+                            {[
+                                <DropdownItem key="user-all" onPress={() => setUserFilter("all")}>All</DropdownItem>,
+                                // Dynamically generate users from data
+                                ...Object.values(data.users).map(user => (
+                                    <DropdownItem 
+                                        key={user.name} 
+                                        onPress={() => setUserFilter(user.name)}
+                                    >
+                                        {user.name}
+                                    </DropdownItem>
+                                ))
+                            ]}
                         </DropdownSection>
                     </DropdownMenu>
                 </Dropdown>
             </div>
 
+            {/* Funnel Chart Container */}
             <div className="p-4 z-0 flex flex-col relative justify-between gap-4 bg-content1 overflow-auto rounded-large shadow-small w-full"> 
                 <MyResponsiveFunnel data={filteredData} />
             </div>
