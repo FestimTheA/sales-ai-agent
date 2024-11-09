@@ -35,8 +35,8 @@ export type ColumnsKey =
   | "last_name"
   | "position"
   | "company"
-  | "linkedin"
-  | "bant_score"
+  | "link"
+  | "score"
   | "campaign"
   | "status"
   | "actions";
@@ -47,8 +47,8 @@ export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
   "last_name",
   "position",
   "company",
-  "linkedin",
-  "bant_score",
+  "link",
+  "score",
   "campaign",
   "status",
   "actions",
@@ -60,8 +60,8 @@ export const columns = [
   { name: "Last Name", uid: "last_name" },
   { name: "Job Position", uid: "position" },
   { name: "Company", uid: "company" },
-  { name: "LinkedIn", uid: "linkedin" },
-  { name: "BANT Score", uid: "bant_score" },
+  { name: "LinkedIn", uid: "link" },
+  { name: "BANT Score", uid: "score" },
   { name: "Campaign Name", uid: "campaign" },
   { name: "Status", uid: "status", info: "The lead's current status" },
   { name: "Actions", uid: "actions" },

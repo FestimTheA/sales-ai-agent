@@ -13,7 +13,7 @@ export default async function LeadsPage() {
       redirect("/sign-in");
     }
 
-    const response = await fetch("http://localhost:5000/leads", {
+    const response = await fetch("http://localhost:5000/user_leads", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,9 +21,11 @@ export default async function LeadsPage() {
       },
     });
 
+    const body = await response.json();
+
     if (!response.ok) {
-      const msg = await response.json();
-      console.error("Failed to fetch leads", msg);
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch leads", body);
 
       if (response.status === 401) {
         redirect("/sign-in");
@@ -32,7 +34,7 @@ export default async function LeadsPage() {
       return [];
     }
 
-    return (await response.json()) as Lead[];
+    return body as Lead[];
   };
 
   const leads: Lead[] = await fetchLeads();

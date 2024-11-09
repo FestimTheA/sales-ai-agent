@@ -194,7 +194,7 @@ export const LeadsTable = ({ leads }: LeadsTableType) => {
             {cellValue}
           </div>
         );
-      case "linkedin":
+      case "link":
         return (
           <div className="flex items-center gap-2">
             <a
@@ -207,7 +207,7 @@ export const LeadsTable = ({ leads }: LeadsTableType) => {
             </a>
           </div>
         );
-      case "bant_score":
+      case "score":
         return (
           <div className="text-nowrap text-small capitalize text-default-foreground">
             {cellValue}
