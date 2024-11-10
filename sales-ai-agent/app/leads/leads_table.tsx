@@ -25,7 +25,7 @@ import {
   DropdownSection,
 } from "@nextui-org/react";
 import { SearchIcon } from "@nextui-org/shared-icons";
-import React, { useMemo, useRef, useCallback, useState } from "react";
+import React, { useMemo, useRef, useCallback, useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { cn } from "@nextui-org/react";
 
@@ -42,7 +42,7 @@ import { columns, INITIAL_VISIBLE_COLUMNS } from "./data";
 import { Status } from "./Status";
 
 type LeadsTableType = {
-  leads: Array<Lead>,
+  leads: Array<Lead>;
 };
 
 export const LeadsTable = ({ leads }: LeadsTableType) => {
@@ -51,7 +51,7 @@ export const LeadsTable = ({ leads }: LeadsTableType) => {
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
-  const [rowsPerPage] = useState(25);
+  const [rowsPerPage] = useState(20);
 
   const [page, setPage] = useState(1);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({

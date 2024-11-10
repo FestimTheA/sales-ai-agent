@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-export const callApiFromClient = async (
+export const callBackendFromClient = async (
   path: string,
   options: RequestInit = {},
 ): Promise<Response> => {

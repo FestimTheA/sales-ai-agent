@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import CreateAccountForm from "./create_account_form";
 import CompanyInfoForm from "./company_info_form";
 import Cookies from "js-cookie";
-import { callApiFromClient } from "@/utils/client-api-service";
+import { callBackendFromClient } from "@/utils/backend/client-backend-service";
 import { useRouter } from "next/navigation";
 
 export default function Component() {
@@ -24,7 +24,7 @@ export default function Component() {
   }
 
   const companyInfoSubmit = async (companyName: string, website: string) => {
-    const response = await callApiFromClient("customers", {
+    const response = await callBackendFromClient("customers", {
       method: "POST",
       body: JSON.stringify({ email, password, website, name: companyName }),
     });
