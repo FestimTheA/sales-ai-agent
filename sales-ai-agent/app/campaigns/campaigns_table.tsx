@@ -45,12 +45,15 @@ import { DeleteFilledIcon } from "@/components/icons";
 // import {ArrowUpIcon} from "@/components/icons";
 
 import { useMemoizedCallback } from "@/hooks/use-memoized-callback";
+import { useRouter } from "next/navigation";
 
 type CampaignsTableProps = {
   campaigns: Campaign[];
 };
 
 export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
+  const router = useRouter();
+
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -242,6 +245,9 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
+                onClick={() => {
+                  router.push(`/campaigns/${campaign.id}/edit`);
+                }}
               />
               {/* <EyeFilledIcon
               {...getEyesProps()}
@@ -529,7 +535,7 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
             {campaigns.length}
           </Chip>
         </div>
-        <Link href="/create-campaign">
+        <Link href="/campaigns/new">
           <Button
             color="primary"
             endContent={<Icon icon="solar:add-circle-bold" width={20} />}

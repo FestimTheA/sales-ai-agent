@@ -8,6 +8,8 @@ export default async function CampaignsPage() {
   const fetchCampaigns = async () => {
     const token = cookies().get("jwt")?.value;
 
+    console.log({ token });
+
     if (!token) {
       redirect("/sign-in");
     }
@@ -22,6 +24,7 @@ export default async function CampaignsPage() {
 
     if (!response.ok) {
       const msg = await response.json();
+
       console.error("Failed to fetch campaigns", msg);
 
       if (response.status === 401) {
@@ -35,5 +38,6 @@ export default async function CampaignsPage() {
   };
 
   const campaigns: Campaign[] = await fetchCampaigns();
+
   return <CampaignsTable campaigns={campaigns} />;
 }

@@ -2,7 +2,7 @@
 
 import type { Key } from "@react-types/shared";
 
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -13,20 +13,20 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-import { JobPositions, industries, locations } from "./data";
+import { Campaign, JobPositions, industries, locations } from "../../data";
 
-export default function App() {
+export default function EditForm({ campaign }: { campaign: Campaign }) {
   const router = useRouter();
 
-  const [name, setName] = React.useState("");
-  const [note, setNote] = React.useState("");
+  const [name, setName] = React.useState(campaign.name);
+  const [note, setNote] = React.useState(campaign.note);
 
   // eslint-disable-next-line prettier/prettier
-  const [selectedJobPositions, setSelectedJobPositions] = React.useState<string[]>([]);
+  const [selectedJobPositions, setSelectedJobPositions] = React.useState<string[]>(campaign.filters.positions);
   // eslint-disable-next-line prettier/prettier
-  const [selectedLocations, setSelectedLocations] = React.useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = React.useState<string[]>(campaign.filters.locations);
   // eslint-disable-next-line prettier/prettier
-  const [selectedIndustries, setSelectedIndustries] = React.useState<string[]>([]);
+  const [selectedIndustries, setSelectedIndustries] = React.useState<string[]>(campaign.filters.industries);
 
   const handleSelectedJobPositionsChange = (
     selectedJobPosition: Key | null,
@@ -139,7 +139,9 @@ export default function App() {
   };
 
   // This is the main part that decides how the page looks
-  const [numberOfLeads, setNumberOfLeads] = React.useState("");
+  const [numberOfLeads, setNumberOfLeads] = React.useState(
+    campaign.total_leads_to_source.toString(),
+  );
   const [showLeadsMessage, setShowLeadsMessage] = React.useState(false);
 
   const handleNumberOfLeadsChange = (
@@ -149,14 +151,15 @@ export default function App() {
     setShowLeadsMessage(e.target.value !== "");
   };
 
-  const handleCreateCampaign = async () => {
+  const handleUpdateCampaign = async () => {
     try {
-      const res = await fetch("/api/campaigns", {
-        method: "POST",
+      const res = await fetch(`/api/campaigns`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: campaign.id,
           name,
           note,
           numberOfLeads,
@@ -185,11 +188,10 @@ export default function App() {
   return (
     <div className="flex h-full w-full justify-center">
       <div className="w-full max-w-lg">
-        {/* Create Campaign Section */}
         <div className="mb-[18px] flex items-center justify-between">
           <div className="flex w-[226px] items-center gap-2">
             <h1 className="text-2xl font-[700] leading-[32px]">
-              Create Campaign
+              Edit Campaign
             </h1>
           </div>
         </div>
@@ -342,13 +344,12 @@ export default function App() {
               </p>
             )}
 
-            {/* Creat Button */}
             <Button
               className="mt-2 w-full"
               color="primary"
-              onClick={handleCreateCampaign}
+              onClick={handleUpdateCampaign}
             >
-              Create Campaign
+              Update Campaign
             </Button>
           </div>
         </div>
