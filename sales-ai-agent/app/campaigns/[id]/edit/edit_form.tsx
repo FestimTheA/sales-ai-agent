@@ -171,6 +171,7 @@ export default function EditForm({ campaign }: { campaign: Campaign }) {
 
       if (res.ok) {
         router.push("/campaigns");
+        router.refresh();
       } else {
         // eslint-disable-next-line no-console
         console.error(`HTTP error! Status: ${res.status}`);
