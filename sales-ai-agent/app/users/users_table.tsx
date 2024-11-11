@@ -28,8 +28,9 @@ import React, { useMemo, useRef, useCallback, useState } from "react";
 import { Icon } from "@iconify/react";
 import { cn } from "@nextui-org/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import { columns, INITIAL_VISIBLE_COLUMNS, users } from "./data";
+import { columns, INITIAL_VISIBLE_COLUMNS } from "./data";
 
 import { ArrowDownIcon, ArrowUpIcon } from "@/components/icons";
 
@@ -50,6 +51,8 @@ type UsersTableType = {
 };
 
 export const UsersTable = ({ users }: UsersTableType) => {
+  const router = useRouter();
+
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -148,6 +151,34 @@ export const UsersTable = ({ users }: UsersTableType) => {
     return resultKeys;
   }, [selectedKeys, filteredItems, filterValue]);
 
+  const handleDeleteUser = async (user_id: number) => {
+    try {
+      const res = await fetch(`/api/users`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: user_id,
+        }),
+      });
+
+      if (res.ok) {
+        router.refresh();
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(`HTTP error! Status: ${res.status}`);
+        const result = await res.json();
+
+        // eslint-disable-next-line no-console
+        console.error(result);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
   // const eyesRef = useRef<HTMLButtonElement | null>(null);
   const editRef = useRef<HTMLButtonElement | null>(null);
   const deleteRef = useRef<HTMLButtonElement | null>(null);
@@ -207,6 +238,11 @@ export const UsersTable = ({ users }: UsersTableType) => {
               className="cursor-pointer text-default-400"
               height={18}
               width={18}
+              onClick={() => {
+                if (window.confirm("Do you really want to delete?")) {
+                  handleDeleteUser(user.id);
+                }
+              }}
             />
           </div>
         );
@@ -380,14 +416,14 @@ export const UsersTable = ({ users }: UsersTableType) => {
                           (sortDescriptor.direction === "ascending" ? (
                             <ArrowUpIcon
                               className="text-default-500"
-                              width={16}
                               height={16}
+                              width={16}
                             />
                           ) : (
                             <ArrowDownIcon
                               className="text-default-500"
-                              width={16}
                               height={16}
+                              width={16}
                             />
                           ))}
                       </div>
@@ -586,6 +622,7 @@ export const UsersTable = ({ users }: UsersTableType) => {
             const isSelected =
               filterSelectedKeys === "all" ||
               filterSelectedKeys.has(String(item.id));
+
             return (
               <TableRow key={item.id} data-selected={isSelected}>
                 {(columnKey) => (

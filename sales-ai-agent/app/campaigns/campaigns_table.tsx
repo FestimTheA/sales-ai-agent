@@ -261,7 +261,7 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
                 height={18}
                 width={18}
                 onClick={() => {
-                  if (window.confirm("Do you really want to leave?")) {
+                  if (window.confirm("Do you really want to delete?")) {
                     handleDeleteCampaign(campaign.id);
                   }
                 }}
