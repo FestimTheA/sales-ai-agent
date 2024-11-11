@@ -13,27 +13,28 @@ export const fetchLeads = async (
     };
   }
 
-  const response = await fetch(
-    `http://localhost:5000/user_leads?page=${page}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+  const response = await fetch(`http://localhost:5000/all_leads?page=${page}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
-  );
-
-  const body = await response.json();
+  });
 
   if (!response.ok) {
     // eslint-disable-next-line no-console
-    console.error("Failed to fetch leads", body);
+    console.error("Failed to fetch leads", response.statusText);
 
     return {
       status: response.status,
+      body: {
+        items: [],
+        pages: 0,
+      },
     };
   }
+
+  const body = await response.json();
 
   return {
     status: response.status,
