@@ -260,6 +260,11 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
                 className="cursor-pointer text-default-400"
                 height={18}
                 width={18}
+                onClick={() => {
+                  if (window.confirm("Do you really want to leave?")) {
+                    handleDeleteCampaign(campaign.id);
+                  }
+                }}
               />
             </div>
           );
@@ -594,6 +599,34 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
     onPreviousPage,
     onNextPage,
   ]);
+
+  const handleDeleteCampaign = async (campaign_id: number) => {
+    try {
+      const res = await fetch(`/api/campaigns`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: campaign_id,
+        }),
+      });
+
+      if (res.ok) {
+        router.refresh();
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(`HTTP error! Status: ${res.status}`);
+        const result = await res.json();
+
+        // eslint-disable-next-line no-console
+        console.error(result);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch data:", error);
+    }
+  };
 
   return (
     <div>
