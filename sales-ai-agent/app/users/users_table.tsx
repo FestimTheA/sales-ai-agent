@@ -226,6 +226,9 @@ export const UsersTable = ({ users }: UsersTableType) => {
               className="cursor-pointer text-default-400"
               height={18}
               width={18}
+              onClick={() => {
+                router.push(`/users/${user.id}/edit`);
+              }}
             />
             {/* <EyeFilledIcon
                 {...getEyesProps()}
