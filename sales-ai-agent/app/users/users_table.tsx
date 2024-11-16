@@ -28,7 +28,7 @@ import React, { useMemo, useRef, useCallback, useState } from "react";
 import { Icon } from "@iconify/react";
 import { cn } from "@nextui-org/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { columns, INITIAL_VISIBLE_COLUMNS } from "./data";
 
@@ -526,7 +526,7 @@ export const UsersTable = ({ users }: UsersTableType) => {
             {users.length}
           </Chip>
         </div>
-        <Link href="/add-user">
+        <Link href="/users/new">
           <Button
             color="primary"
             endContent={<Icon icon="solar:add-circle-bold" width={20} />}

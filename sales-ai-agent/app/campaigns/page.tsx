@@ -28,7 +28,7 @@ export default async function CampaignsPage() {
       console.error("Failed to fetch campaigns", msg);
 
       if (response.status === 401) {
-        cookies().set("jwt", "", { expires: new Date(0) });
+        // cookies().set("jwt", "", { expires: new Date(0) });
         redirect("/sign-in");
       }
 

@@ -26,14 +26,20 @@ export default function Component() {
 
       if (res.ok) {
         // Slight delay to ensure cookie is set
-        setTimeout(() => router.push("/dashboard"), 1000);
+        // setTimeout(() => router.push("/dashboard"), 1000);
+        router.push("/dashboard");
+        router.refresh();
       } else {
         // eslint-disable-next-line no-console
         console.error(`HTTP error! Status: ${res.status}`);
-        const result = await res.json();
+        if (res.status === 401) {
+          alert("Invalid email or password");
+        } else {
+          const result = await res.json();
 
-        // eslint-disable-next-line no-console
-        console.error(`HTTP message: ${result["error"]}`);
+          // eslint-disable-next-line no-console
+          console.error(`HTTP message: ${result["error"]}`);
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console

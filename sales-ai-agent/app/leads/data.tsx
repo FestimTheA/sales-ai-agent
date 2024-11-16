@@ -3,17 +3,17 @@ import { SuccessCircleSvg } from "@/components/icons";
 import { WarningCircleSvg } from "@/components/icons";
 
 export const statusOptions = [
-  { name: "Outreached", uid: "active" },
-  { name: "Failed", uid: "paused" },
-  { name: "Waiting", uid: "vacation" },
+  { name: "outreached", uid: "active" },
+  { name: "failed", uid: "paused" },
+  { name: "waiting", uid: "vacation" },
 ] as const;
 
 export type StatusOptions = (typeof statusOptions)[number]["name"];
 
 export const statusColorMap: Record<StatusOptions, JSX.Element> = {
-  Outreached: SuccessCircleSvg,
-  Failed: DangerCircleSvg,
-  Waiting: WarningCircleSvg,
+  outreached: SuccessCircleSvg,
+  failed: DangerCircleSvg,
+  waiting: WarningCircleSvg,
 };
 
 export type Lead = {
