@@ -4,32 +4,20 @@ import React from "react";
 import { Button, Input, Link } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-type Params = {
-  token: string;
-};
-
-export default function ResetPassword({ params }: { params: Params }) {
+export default function ForgotPassword() {
   const router = useRouter();
 
-  const [password, setPassword] = React.useState("");
-  const [confirmedPassword, setConfirmedPassword] = React.useState("");
+  const [email, setEmail] = React.useState("");
 
-  const handleSavePassword = async () => {
-    if (password !== confirmedPassword) {
-      alert("Passwords do not match");
-
-      return;
-    }
-
+  const handleForgotPassword = async () => {
     try {
-      const res = await fetch("/api/users/reset-password", {
+      const res = await fetch("/api/users/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          token: params.token,
-          password,
+          email,
         }),
       });
 
@@ -54,7 +42,7 @@ export default function ResetPassword({ params }: { params: Params }) {
     <div className="flex h-full w-full justify-center">
       <div className="w-full max-w-lg">
         <h1 className="text-2xl font-[700] leading-[32px] mb-4">
-          Set Password
+          Forgot Password?
         </h1>
         <div className="flex w-full flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
           <form
@@ -63,22 +51,19 @@ export default function ResetPassword({ params }: { params: Params }) {
           >
             <Input
               isRequired
-              label="Password"
-              placeholder="Enter your password"
-              type="password"
+              label="Email"
+              name="email"
+              placeholder="Enter your email"
+              type="email"
               variant="bordered"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
-              isRequired
-              label="Confirm password"
-              placeholder="Confirm your pasword"
-              type="password"
-              variant="bordered"
-              onChange={(e) => setConfirmedPassword(e.target.value)}
-            />
-            <Button color="primary" type="submit" onClick={handleSavePassword}>
-              Set Password
+            <Button
+              color="primary"
+              type="submit"
+              onClick={handleForgotPassword}
+            >
+              Reset Password
             </Button>
           </form>
           <p className="text-left text-small">

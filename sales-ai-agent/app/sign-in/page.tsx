@@ -92,7 +92,7 @@ export default function Component() {
               </Checkbox>
               <Link
                 className="text-default-500"
-                href="/forgot-password"
+                href="/users/forgot-password"
                 size="sm"
               >
                 Forgot password?
