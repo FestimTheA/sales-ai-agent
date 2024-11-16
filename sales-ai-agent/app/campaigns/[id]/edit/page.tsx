@@ -31,6 +31,7 @@ export default async function EditCampaignPage({ params }: { params: Params }) {
     if (!response.ok) {
       const msg = await response.json();
 
+      // eslint-disable-next-line no-console
       console.error("Failed to fetch campaigns", msg);
 
       if (response.status === 401) {

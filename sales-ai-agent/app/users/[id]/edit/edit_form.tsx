@@ -5,23 +5,28 @@ import { Button, Input } from "@nextui-org/react";
 // import { Select, SelectItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-// import { roles } from "./data";
+import { User } from "../../data";
 
-export default function NewUser() {
+type Params = {
+  user: User;
+};
+
+export default function EditUserForm({ user }: Params) {
   const router = useRouter();
 
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [firstName, setFirstName] = React.useState(user.first_name);
+  const [lastName, setLastName] = React.useState(user.last_name);
+  const [email, setEmail] = React.useState(user.email);
 
-  const handleCreateUser = async () => {
+  const handleUpdateUser = async () => {
     try {
-      const res = await fetch("/api/users", {
-        method: "POST",
+      const res = await fetch(`/api/users`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: user.id,
           first_name: firstName,
           last_name: lastName,
           email,
@@ -52,7 +57,7 @@ export default function NewUser() {
   return (
     <div className="flex h-full w-full justify-center">
       <div className="w-full max-w-lg">
-        <h1 className="text-2xl font-[700] leading-[32px] mb-4">Add User</h1>
+        <h1 className="text-2xl font-[700] leading-[32px] mb-4">Edit User</h1>
         <div className="flex w-full flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
           <form
             className="flex flex-col gap-3"
@@ -64,6 +69,7 @@ export default function NewUser() {
               name="firstName"
               placeholder="Enter first name"
               type="text"
+              value={firstName}
               variant="bordered"
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -73,6 +79,7 @@ export default function NewUser() {
               name="lastName"
               placeholder="Enter last name"
               type="text"
+              value={lastName}
               variant="bordered"
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -82,6 +89,7 @@ export default function NewUser() {
               name="email"
               placeholder="Enter email"
               type="email"
+              value={email}
               variant="bordered"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -95,8 +103,8 @@ export default function NewUser() {
               {(role) => <SelectItem key={role.key}>{role.label}</SelectItem>}
             </Select> */}
 
-            <Button color="primary" type="submit" onClick={handleCreateUser}>
-              Add User
+            <Button color="primary" type="submit" onClick={handleUpdateUser}>
+              Update User
             </Button>
           </form>
         </div>

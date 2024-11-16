@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 import { UsersTable } from "./users_table";
 import { User } from "./data";

@@ -24,14 +24,14 @@ export default function Component() {
   }
 
   const companyInfoSubmit = async (companyName: string, website: string) => {
-    const response = await callBackendFromClient("customers", {
+    const res = await callBackendFromClient("customers", {
       method: "POST",
       body: JSON.stringify({ email, password, website, name: companyName }),
     });
 
-    const result = await response.json();
+    if (res.ok) {
+      const result = await res.json();
 
-    if (response.ok) {
       Cookies.set("jwt", result.token, {
         expires: 7,
         path: "/",
@@ -48,9 +48,15 @@ export default function Component() {
       router.push("/campaigns");
     } else {
       // eslint-disable-next-line no-console
-      console.error(`HTTP error! Status: ${response.status}`);
-      // eslint-disable-next-line no-console
-      console.error(`HTTP message: ${result['error']}`)
+      console.error(`HTTP error! Status: ${res.status}`);
+      if (res.status === 401) {
+        router.push("/sign-in");
+      } else {
+        const result = await res.json();
+
+        // eslint-disable-next-line no-console
+        console.error(`HTTP message: ${result["error"]}`);
+      }
     }
   }
 

@@ -39,10 +39,14 @@ export default function ResetPassword({ params }: { params: Params }) {
       } else {
         // eslint-disable-next-line no-console
         console.error(`HTTP error! Status: ${res.status}`);
-        const result = await res.json();
+        if (res.status === 401) {
+          router.push("/sign-in");
+        } else {
+          const result = await res.json();
 
-        // eslint-disable-next-line no-console
-        console.error(result);
+          // eslint-disable-next-line no-console
+          console.error(`HTTP message: ${result["error"]}`);
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console
