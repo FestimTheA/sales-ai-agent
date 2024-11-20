@@ -1,25 +1,25 @@
 "use client";
 
 // Removed this import
-// import type {NavbarProps} from "@nextui-org/react"; 
+// import type {NavbarProps} from "@nextui-org/react";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   Navbar as NextUINavbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
   Link,
-  Button,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
   Avatar,
 } from "@nextui-org/react";
+
 // import { Logo } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
 
@@ -28,7 +28,7 @@ const menuItems = [
   // "Sign In",
   // "Forgot Password?",
   // "User Info",
-  "Sales AI Agent",
+  // "Sales AI Agent",
   "Dashboard",
   "Campaigns",
   // "Create Campaign",
@@ -38,8 +38,8 @@ const menuItems = [
   // "Add User",
   // "Modal",
   // "Extension",
-  "Test",
-  "ThemeSwitch"
+  // "Test",
+  "ThemeSwitch",
 ];
 
 // This was the original code but it didn't work
@@ -48,6 +48,13 @@ const menuItems = [
 //     <Navbar
 //       {...props}
 export const Navbar = () => {
+  const router = useRouter();
+
+  const signOut = async () => {
+    await fetch("/api/sign-out", { method: "POST" });
+    router.push("/sign-in");
+  };
+
   return (
     <NextUINavbar
       classNames={{
@@ -58,7 +65,7 @@ export const Navbar = () => {
       height="54px"
     >
       <NavbarContent
-        className="gap-4 rounded-2xl border-small border-default-200/20 bg-background/60 px-2 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
+        className="gap-4 rounded-2xl border-small border-default-200/20 bg-background/60 px-5 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
         justify="center"
       >
         {/* Toggle */}
@@ -71,9 +78,9 @@ export const Navbar = () => {
           </div>
           <span className="ml-2 font-medium md:hidden">ACME</span>
         </NavbarBrand> */}
-        
-       {/* Items */}
-       {/* <NavbarItem className="hidden md:flex">
+
+        {/* Items */}
+        {/* <NavbarItem className="hidden md:flex">
           <Link className="text-default-500" href="/create-account" size="sm">
             Create Account
           </Link>
@@ -93,11 +100,11 @@ export const Navbar = () => {
             Company Info
           </Link>
         </NavbarItem> */}
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link className="text-default-500" href="/sales-ai-agent" size="sm">
             Sales AI Agent
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <Link className="text-default-500" href="/dashboard" size="sm">
             Dashboard
@@ -144,11 +151,6 @@ export const Navbar = () => {
           </Link>
         </NavbarItem> */}
         <NavbarItem>
-          <Link className="text-default-500" href="/test" size="sm">
-            Test
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="ml-2 !flex">
@@ -165,7 +167,7 @@ export const Navbar = () => {
               <DropdownItem key="settings" href="/settings">
                 Settings
               </DropdownItem>
-              <DropdownItem key="sign out" color="danger" href="/sign-in">
+              <DropdownItem key="sign out" color="danger" onClick={signOut}>
                 Sign Out
               </DropdownItem>
             </DropdownMenu>
@@ -177,9 +179,9 @@ export const Navbar = () => {
       <NavbarMenu
         className="top-[calc(var(--navbar-height)/2)] mx-auto mt-16 max-h-[40vh] max-w-[80vw] rounded-large border-small border-default-200/20 bg-background/60 py-6 shadow-medium backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50"
         motionProps={{
-          initial: {opacity: 0, y: -20},
-          animate: {opacity: 1, y: 0},
-          exit: {opacity: 0, y: -20},
+          initial: { opacity: 0, y: -20 },
+          animate: { opacity: 1, y: 0 },
+          exit: { opacity: 0, y: -20 },
           transition: {
             ease: "easeInOut",
             duration: 0.2,
@@ -192,7 +194,11 @@ export const Navbar = () => {
             {item === "ThemeSwitch" ? (
               <ThemeSwitch />
             ) : (
-              <Link className="w-full text-default-500" href={`/${item.toLowerCase().replace(/\s+/g, '-')}`} size="md">
+              <Link
+                className="w-full text-default-500"
+                href={`/${item.toLowerCase().replace(/\s+/g, "-")}`}
+                size="md"
+              >
                 {item}
               </Link>
             )}

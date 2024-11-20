@@ -10,7 +10,7 @@ export interface StatusProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Status = memo(
   forwardRef<HTMLDivElement, StatusProps>((props, forwardedRef) => {
-    const {className, status} = props;
+    const { className, status } = props;
     const statusColor = statusColorMap[status];
 
     return (

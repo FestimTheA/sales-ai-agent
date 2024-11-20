@@ -1,84 +1,71 @@
+/* eslint-disable import/order */
+/* eslint-disable prettier/prettier */
 "use client";
 
-import React from "react";
-import {Button, Input, Checkbox, Link, Divider} from "@nextui-org/react";
-import {Icon} from "@iconify/react";
+import React, { useState } from "react";
+
+import CreateAccountForm from "./create_account_form";
+import CompanyInfoForm from "./company_info_form";
+import Cookies from "js-cookie";
+import { callBackendFromClient } from "@/utils/backend/client-backend-service";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isCompanyInfo, setIsCompanyInfo] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const router = useRouter();
+
+  const createAccountSubmit = (email: string, password: string) => {
+    setEmail(email);
+    setPassword(password);
+    setIsCompanyInfo(true);
+  }
+
+  const companyInfoSubmit = async (companyName: string, website: string) => {
+    const res = await callBackendFromClient("customers", {
+      method: "POST",
+      body: JSON.stringify({ email, password, website, name: companyName }),
+    });
+
+    if (res.ok) {
+      const result = await res.json();
+
+      Cookies.set("jwt", result.token, {
+        expires: 7,
+        path: "/",
+        sameSite: "Lax",
+        secure: process.env.NODE_ENV === "production",
+      });
+      Cookies.set("user-id", result.id, {
+        expires: 7,
+        path: "/",
+        sameSite: "Lax",
+        secure: process.env.NODE_ENV === "production",
+      });
+
+      router.push("/campaigns");
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(`HTTP error! Status: ${res.status}`);
+      if (res.status === 401) {
+        router.push("/sign-in");
+      } else {
+        const result = await res.json();
+
+        // eslint-disable-next-line no-console
+        console.error(`HTTP message: ${result["error"]}`);
+      }
+    }
+  }
 
   return (
     <div className="flex h-full w-full justify-center">
       <div className="w-full max-w-lg">
-        <h1 className="text-2xl font-[700] leading-[32px] mb-4">Create Account</h1>
+        <h1 className="text-2xl font-[700] leading-[32px] mb-4">{isCompanyInfo ? 'Company Info' : 'Create Account'} </h1>
         <div className="flex w-full flex-col gap-4 rounded-large bg-content1 px-8 pb-10 pt-6 shadow-small">
-          <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-            <Input
-              isRequired
-              label="Email"
-              name="email"
-              placeholder="Enter your email"
-              type="email"
-              variant="bordered"
-            />
-            <Input
-              isRequired
-              endContent={
-                <button type="button" onClick={toggleVisibility}>
-                  {isVisible ? (
-                    <Icon
-                      className="pointer-events-none text-2xl text-default-400"
-                      icon="solar:eye-closed-linear"
-                    />
-                  ) : (
-                    <Icon
-                      className="pointer-events-none text-2xl text-default-400"
-                      icon="solar:eye-bold"
-                    />
-                  )}
-                </button>
-              }
-              label="Password"
-              name="password"
-              placeholder="Enter your password"
-              type={isVisible ? "text" : "password"}
-              variant="bordered"
-            />
-            <Checkbox isRequired className="py-4" size="sm">
-              I agree with the&nbsp;
-              <Link href="#" size="sm">
-                Terms
-              </Link>
-              &nbsp;and&nbsp;
-              <Link href="#" size="sm">
-                Privacy Policy
-              </Link>
-            </Checkbox>
-            <Button color="primary" type="submit">
-              Create Account
-            </Button>
-          </form>
-          <div className="flex items-center gap-4 py-2">
-            <Divider className="flex-1" />
-            <p className="shrink-0 text-tiny text-default-500">OR</p>
-            <Divider className="flex-1" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Button
-              startContent={<Icon icon="flat-color-icons:google" width={24} />}
-              variant="bordered"
-            >
-              Create Account with Google
-            </Button>
-          </div>
-          <p className="text-left text-small">
-            Already have an account?&nbsp;
-            <Link href="sign-in" size="sm">
-              Sign In
-            </Link>
-          </p>
+          {isCompanyInfo ? <CompanyInfoForm submitCallback={companyInfoSubmit} /> : <CreateAccountForm submitCallback={createAccountSubmit} />}
         </div>
       </div>
     </div>

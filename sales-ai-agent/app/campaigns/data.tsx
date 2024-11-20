@@ -1,102 +1,82 @@
-
-export type Users = {
+export type Campaign = {
   id: number;
-  TimeCreated: string;
-  CampaignName: string;
-  Sourced: number ;
-  Outreached: number;
-  Accepted: number;
-  Responded: number; 
-  status: string;
+  name: string;
+  filters: { [key: string]: any };
+  total_leads_to_source: number;
+  note: string;
+  sourced: number;
+  outreached: number;
+  accepted: number;
+  responded: number;
+  status: string; // "On" | "Off";
+  created_at: Date;
+  updated_at: string;
 };
 
 export type ColumnsKey =
-  | "TimeCreated"
-  | "CampaignName" 
-  | "Sourced"
-  | "Outreached"
-  | "Accepted"
-  | "Responded"
+  | "name"
+  | "created_at"
+  | "updated_at"
+  | "sourced"
+  | "outreached"
+  | "accepted"
+  | "responded"
   | "status"
   | "actions";
 
 export const INITIAL_VISIBLE_COLUMNS: ColumnsKey[] = [
-  "TimeCreated",
-  "CampaignName",
-  "Sourced",
-  "Outreached",
-  "Accepted",
-  "Responded",
+  "created_at",
+  "updated_at",
+  "name",
+  "sourced",
+  "outreached",
+  "accepted",
+  "responded",
   "status",
   "actions",
 ];
 
 export const columns = [
-  {name: "Time Created", uid: "TimeCreated"},
-  {name: "Campaign Name", uid: "CampaignName"},
-  {name: "Sourced", uid: "Sourced"},
-  {name: "Outreached", uid: "Outreached"},
-  {name: "Accepted", uid: "Accepted"},
-  {name: "Responded", uid: "Responded"},
-  {name: "Status", uid: "status", info: "The user's current status"},
-  {name: "Actions", uid: "actions"},
+  { name: "Time Created", uid: "created_at" },
+  { name: "Time Last Updated", uid: "updated_at" },
+  { name: "Campaign Name", uid: "name" },
+  { name: "Sourced", uid: "sourced" },
+  { name: "Outreached", uid: "outreached" },
+  { name: "Accepted", uid: "accepted" },
+  { name: "Responded", uid: "responded" },
+  { name: "Status", uid: "status", info: "The campaign's current status" },
+  { name: "Actions", uid: "actions" },
 ];
 
-const TimeCreated = [
-  "October 10, 2024, 10:00",
-  "October 10, 2024, 10:05",
-  "October 10, 2024, 10:10",
+export const JobPositions = [
+  { label: "Software Engineer", value: "Software Engineer" },
+  { label: "Marketing Manager", value: "Marketing Manager" },
+  { label: "Chief Executive Officer", value: "Chief Executive Officer" },
+  { label: "Chief Financial Officer", value: "Chief Financial Officer" },
+  { label: "Chief Marketing Officer", value: "Chief Marketing Officer" },
+  { label: "Project Manager", value: "Project Manager" },
 ];
 
-const Sourced = [
-  "750",
+export const locations = [
+  { label: "New York City", value: "New York City" },
+  { label: "Los Angeles", value: "Los Angeles" },
+  { label: "Chicago", value: "Chicago" },
+  { label: "Houston", value: "Houston" },
+  { label: "Miami", value: "Miami" },
+  { label: "San Francisco", value: "San Francisco" },
 ];
 
-const Outreached = [ 
-  "575",
+export const industries = [
+  { label: "Technology", value: "Technology" },
+  { label: "Healthcare", value: "Healthcare" },
+  { label: "Finance", value: "Finance" },
+  { label: "Education", value: "Education" },
+  { label: "Manufacturing", value: "Manufacturing" },
+  { label: "Retail", value: "Retail" },
 ];
 
-const Accepted = [
-  "115",
+export const campaigns = [
+  { label: "Pilot", value: "pilot" },
+  { label: "Campaign 2", value: "campaign-2" },
+  { label: "Campaign 3", value: "campaign-3" },
 ];
-
-const Responded = [
-  "15",
-];
-
-const CampaignName = [
-  "Campaign 1",
-];
-
-const generateMockUserData = (count: number): Users[] => {
-  const mockData: Users[] = [];
-
-  for (let i = 0; i < count; i++) {
-    const selectedRole1 = TimeCreated[Math.floor(Math.random() * TimeCreated.length)];
-    const selectedRole2 = CampaignName[Math.floor(Math.random() * CampaignName.length)];  
-    const selectedRole3 = Sourced[Math.floor(Math.random() * Sourced.length)];
-    const selectedRole4 = Outreached[Math.floor(Math.random() * Outreached.length)];
-    const selectedRole5 = Accepted[Math.floor(Math.random() * Accepted.length)];
-    const selectedRole6 = Responded[Math.floor(Math.random() * Responded.length)];
-
- 
-
-    const user: Users = {
-      id: i,
-      TimeCreated: selectedRole1,
-      CampaignName: selectedRole2,
-      Sourced: Number(selectedRole3), 
-      Outreached: Number(selectedRole4),
-      Accepted: Number(selectedRole5),
-      Responded: Number(selectedRole6),
-      status: "On",
-    };
-
-    mockData.push(user);
-  }
-
-  return mockData;
-};
-// "
-
-export const users: Users[] = generateMockUserData(1);
