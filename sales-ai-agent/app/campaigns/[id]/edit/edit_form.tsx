@@ -2,7 +2,7 @@
 
 import type { Key } from "@react-types/shared";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -18,15 +18,15 @@ import { Campaign, JobPositions, industries, locations } from "../../data";
 export default function EditForm({ campaign }: { campaign: Campaign }) {
   const router = useRouter();
 
-  const [name, setName] = React.useState(campaign.name);
-  const [note, setNote] = React.useState(campaign.note);
+  const [name, setName] = useState<string>(campaign.name);
+  const [note, setNote] = useState<string>(campaign.note);
 
   // eslint-disable-next-line prettier/prettier
-  const [selectedJobPositions, setSelectedJobPositions] = React.useState<string[]>(campaign.filters.positions);
+  const [selectedJobPositions, setSelectedJobPositions] = useState<string[]>(campaign.filters.positions || []);
   // eslint-disable-next-line prettier/prettier
-  const [selectedLocations, setSelectedLocations] = React.useState<string[]>(campaign.filters.locations);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>(campaign.filters.locations || []);
   // eslint-disable-next-line prettier/prettier
-  const [selectedIndustries, setSelectedIndustries] = React.useState<string[]>(campaign.filters.industries);
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>(campaign.filters.industries || []);
 
   const handleSelectedJobPositionsChange = (
     selectedJobPosition: Key | null,
@@ -139,10 +139,10 @@ export default function EditForm({ campaign }: { campaign: Campaign }) {
   };
 
   // This is the main part that decides how the page looks
-  const [numberOfLeads, setNumberOfLeads] = React.useState(
+  const [numberOfLeads, setNumberOfLeads] = useState(
     campaign.total_leads_to_source.toString(),
   );
-  const [showLeadsMessage, setShowLeadsMessage] = React.useState(false);
+  const [showLeadsMessage, setShowLeadsMessage] = useState(false);
 
   const handleNumberOfLeadsChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -324,12 +324,11 @@ export default function EditForm({ campaign }: { campaign: Campaign }) {
             </div>
           </div>
 
-          {/* Available Leads Info */}
-          <div>
+          {/* <div>
             <p className="text-small text-default-500">
               Based on these filters, there are 10,000 available leads.
             </p>
-          </div>
+          </div> */}
 
           {/* Number of Leads Input */}
           <div>

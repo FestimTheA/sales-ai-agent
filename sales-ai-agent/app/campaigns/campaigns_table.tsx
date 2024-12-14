@@ -233,7 +233,7 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
             <div>
               <Switch
                 defaultSelected={cellValue === "On"}
-                onClick={(e) => e.stopPropagation()}
+                onValueChange={(isSelected: boolean) => handleToggleStatus(isSelected, campaign.id)}
               />
             </div>
           );
@@ -624,6 +624,44 @@ export const CampaignsTable = ({ campaigns }: CampaignsTableProps) => {
 
           // eslint-disable-next-line no-console
           console.error(`HTTP message: ${result["error"]}`);
+        }
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  const handleToggleStatus = async (
+    isSelected: boolean,
+    campaign_id: number,
+  ) => {
+    try {
+      const res = await fetch("/api/campaigns", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: campaign_id,
+          is_active: isSelected,
+        }),
+      });
+
+      if (res.ok) {
+        router.refresh();
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(`HTTP error! Status: ${res.status}`);
+        if (res.status === 401) {
+          router.push("/sign-in");
+        } else {
+          const result = await res.json();
+
+          // eslint-disable-next-line no-console
+          console.error(`HTTP message: ${result["error"]}`);
+          alert(`Error: ${result["error"]}`);
+          router.refresh();
         }
       }
     } catch (error) {

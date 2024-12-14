@@ -8,8 +8,6 @@ export default async function CampaignsPage() {
   const fetchCampaigns = async () => {
     const token = cookies().get("jwt")?.value;
 
-    console.log({ token });
-
     if (!token) {
       redirect("/sign-in");
     }

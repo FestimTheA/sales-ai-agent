@@ -179,6 +179,7 @@ export default function NewPageCampaign() {
 
           // eslint-disable-next-line no-console
           console.error(`HTTP message: ${result["error"]}`);
+          alert(result["error"]);
         }
       }
     } catch (error) {
@@ -322,12 +323,11 @@ export default function NewPageCampaign() {
             </div>
           </div>
 
-          {/* Available Leads Info */}
-          <div>
+          {/* <div>
             <p className="text-small text-default-500">
               Based on these filters, there are 10,000 available leads.
             </p>
-          </div>
+          </div> */}
 
           {/* Number of Leads Input */}
           <div>
