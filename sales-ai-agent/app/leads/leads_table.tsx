@@ -25,7 +25,7 @@ import {
   DropdownSection,
 } from "@nextui-org/react";
 import { SearchIcon } from "@nextui-org/shared-icons";
-import React, { useMemo, useRef, useCallback, useState, useEffect } from "react";
+import React, { useMemo, useRef, useCallback, useState } from "react";
 import { Icon } from "@iconify/react";
 import { cn } from "@nextui-org/react";
 
@@ -162,6 +162,7 @@ export const LeadsTable = ({ leads }: LeadsTableType) => {
     const leadKey = columnKey as ColumnsKey;
 
     const cellValue = lead[leadKey as unknown as keyof Lead] as string;
+    // console.log({ id: lead.id, leadKey, cellValue });
 
     switch (leadKey) {
       case "created_at":
@@ -207,12 +208,12 @@ export const LeadsTable = ({ leads }: LeadsTableType) => {
             </a>
           </div>
         );
-      case "score":
-        return (
-          <div className="text-nowrap text-small capitalize text-default-foreground">
-            {cellValue}
-          </div>
-        );
+      // case "score":
+      //   return (
+      //     <div className="text-nowrap text-small capitalize text-default-foreground">
+      //       {cellValue}
+      //     </div>
+      //   );
       case "campaign":
         return (
           <div className="text-nowrap text-small capitalize text-default-foreground">

@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
       note,
       total_leads_to_source: numberOfLeads,
       filters: {
-        positions: jobPositions,
-        locations,
-        industries,
+        "Current job title": jobPositions,
+        Geography: locations,
+        Industry: industries,
       },
     }),
   });
@@ -39,8 +39,16 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   const token = retrieveTokenServerSide();
 
-  const { id, name, note, jobPositions, locations, industries, numberOfLeads } =
-    await request.json();
+  const {
+    id,
+    name,
+    note,
+    jobPositions,
+    locations,
+    industries,
+    numberOfLeads,
+    is_active,
+  } = await request.json();
 
   const res = await fetch(`http://localhost:5000/campaigns/${id}`, {
     method: "PUT",
@@ -52,10 +60,11 @@ export async function PUT(request: NextRequest) {
       name,
       note,
       total_leads_to_source: numberOfLeads,
+      is_active,
       filters: {
-        positions: jobPositions,
-        locations,
-        industries,
+        "Current job title": jobPositions,
+        Geography: locations,
+        Industry: industries,
       },
     }),
   });
