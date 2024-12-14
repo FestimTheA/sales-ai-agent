@@ -2,7 +2,7 @@
 
 import type { Key } from "@react-types/shared";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -13,20 +13,27 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-import { JobPositions, industries, locations } from "../data";
+import {
+  JobPositions,
+  companyHeadcounts,
+  industries,
+  locations,
+} from "../data";
 
 export default function NewPageCampaign() {
   const router = useRouter();
 
-  const [name, setName] = React.useState("");
-  const [note, setNote] = React.useState("");
+  const [name, setName] = useState("");
+  const [note, setNote] = useState("");
 
   // eslint-disable-next-line prettier/prettier
-  const [selectedJobPositions, setSelectedJobPositions] = React.useState<string[]>([]);
+  const [selectedJobPositions, setSelectedJobPositions] = useState<string[]>([]);
   // eslint-disable-next-line prettier/prettier
-  const [selectedLocations, setSelectedLocations] = React.useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   // eslint-disable-next-line prettier/prettier
-  const [selectedIndustries, setSelectedIndustries] = React.useState<string[]>([]);
+  const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  // eslint-disable-next-line prettier/prettier
+  const [selectedCompanyHeadcounts, setSelectedCompanyHeadcounts] = useState<string[]>([]);
 
   const handleSelectedJobPositionsChange = (
     selectedJobPosition: Key | null,
@@ -66,6 +73,20 @@ export default function NewPageCampaign() {
     }
   };
 
+  const handleSelectedCompanyHeadcountsChange = (
+    selectedCompanyHeadcount: Key | null,
+  ) => {
+    if (selectedCompanyHeadcount) {
+      const selectedCompanyHeadcountStr = selectedCompanyHeadcount.toString();
+
+      setSelectedCompanyHeadcounts((prevCompanyHeadcounts) =>
+        prevCompanyHeadcounts.includes(selectedCompanyHeadcountStr)
+          ? prevCompanyHeadcounts
+          : [...prevCompanyHeadcounts, selectedCompanyHeadcountStr],
+      );
+    }
+  };
+
   const handleJobPositionChipClose = (valueToRemove: string) => {
     setSelectedJobPositions((prevJobPositions) =>
       prevJobPositions.filter((value) => value !== valueToRemove),
@@ -81,6 +102,12 @@ export default function NewPageCampaign() {
   const handleIndustryChipClose = (valueToRemove: string) => {
     setSelectedIndustries((prevIndustries) =>
       prevIndustries.filter((value) => value !== valueToRemove),
+    );
+  };
+
+  const handleCompanyHeadcountChipClose = (valueToRemove: string) => {
+    setSelectedCompanyHeadcounts((prevCompanyHeadcounts) =>
+      prevCompanyHeadcounts.filter((value) => value !== valueToRemove),
     );
   };
 
@@ -133,6 +160,24 @@ export default function NewPageCampaign() {
       // If there's exactly one match, select it automatically
       if (visibleOptions.length === 1) {
         handleSelectedIndustriesChange(visibleOptions[0].value);
+        input.value = "";
+      }
+    }
+  };
+
+  const handleCompanyHeadcountKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") {
+      const input = event.target as HTMLInputElement;
+      // Find options that match what the user typed
+      const visibleOptions = companyHeadcounts.filter((item) =>
+        item.label.toLowerCase().includes(input.value.toLowerCase()),
+      );
+
+      // If there's exactly one match, select it automatically
+      if (visibleOptions.length === 1) {
+        handleSelectedCompanyHeadcountsChange(visibleOptions[0].value);
         input.value = "";
       }
     }
@@ -316,6 +361,36 @@ export default function NewPageCampaign() {
                   key={value}
                   variant="flat"
                   onClose={() => handleIndustryChipClose(value)}
+                >
+                  {value}
+                </Chip>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Autocomplete
+              defaultItems={companyHeadcounts}
+              disabledKeys={selectedCompanyHeadcounts}
+              label={"Company headcount"}
+              placeholder={"Search for a company headcount"}
+              variant="bordered"
+              onKeyDown={handleCompanyHeadcountKeyDown}
+              onSelectionChange={handleSelectedCompanyHeadcountsChange}
+            >
+              {(item) => (
+                <AutocompleteItem key={item.value}>
+                  {item.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+            <div
+              className={`flex flex-wrap gap-2 ${selectedCompanyHeadcounts.length > 0 ? "pt-3 pb-0" : ""}`}
+            >
+              {selectedCompanyHeadcounts.map((value) => (
+                <Chip
+                  key={value}
+                  variant="flat"
+                  onClose={() => handleCompanyHeadcountChipClose(value)}
                 >
                   {value}
                 </Chip>
